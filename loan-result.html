@@ -123,37 +123,38 @@
       color: var(--gray-700);
     }
 
-    /* ─── Loan condition cards ─── */
-    .loan-cards {
+    /* ─── Loan condition items (Figma 3172:2244) ─── */
+    .loan-items {
       display: flex;
       flex-direction: column;
-      gap: 14px;
     }
-    .loan-card {
-      background: var(--gray-100);
-      border-radius: 16px;
-      padding: 24px 24px 22px;
+    .loan-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 18px 0;
     }
-    .loan-card__label {
-      font-size: .8125rem;
-      font-weight: 500;
-      color: var(--gray-700);
-      letter-spacing: -.01em;
-      margin-bottom: 8px;
+    .loan-item + .loan-item {
+      border-top: 1px solid var(--gray-200);
     }
-    .loan-card__value {
-      font-size: 2rem;
-      font-weight: 800;
-      letter-spacing: -.04em;
-      color: var(--gray-900);
-      line-height: 1.1;
+    .loan-item img {
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
     }
-    .loan-card__value .unit {
-      font-size: 1.25rem;
+    .loan-item__label {
+      font-size: .9375rem;
+      font-weight: 400;
+      color: var(--gray-800);
+      letter-spacing: -.02em;
+      flex: 1;
+    }
+    .loan-item__value {
+      font-size: .9375rem;
       font-weight: 700;
+      color: var(--gray-900);
       letter-spacing: -.02em;
     }
-    .loan-card--rate .loan-card__value { color: var(--green-500); }
 
     /* ─── Button area ─── */
     .btn-area {
@@ -208,15 +209,17 @@
         <p class="subtitle">900점 대 통계 기준이에요</p>
       </div>
 
-      <!-- Loan condition cards -->
-      <div class="loan-cards">
-        <div class="loan-card loan-card--rate">
-          <div class="loan-card__label">최저금리</div>
-          <div class="loan-card__value">3.95<span class="unit">%</span></div>
+      <!-- Loan condition items (Figma 3172:2244) -->
+      <div class="loan-items">
+        <div class="loan-item">
+          <img src="https://www.figma.com/api/mcp/asset/12d3a690-6e05-496c-b69c-cdfae76df3b6" width="24" height="24" alt="">
+          <span class="loan-item__label">최저 금리</span>
+          <span class="loan-item__value">연 3.95%</span>
         </div>
-        <div class="loan-card">
-          <div class="loan-card__label">최대한도</div>
-          <div class="loan-card__value">1.25<span class="unit">억 원</span></div>
+        <div class="loan-item">
+          <img src="https://www.figma.com/api/mcp/asset/510e3f8a-0a75-4996-91bd-659845dda2a7" width="24" height="24" alt="">
+          <span class="loan-item__label">최대 한도</span>
+          <span class="loan-item__value">1.25억 원</span>
         </div>
       </div>
 
