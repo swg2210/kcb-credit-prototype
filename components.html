@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>KCB 분석 — 컴포넌트 (impeccable v2)</title>
+
+  <link rel="stylesheet" as="style" crossorigin
+    href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+
+  <style>
+    /* ============================================================
+       KCB 분석 — 에디토리얼 진단 (impeccable 기준 재설계)
+       방향: editorial / financial-report clarity
+       · 카드 나열 ✗  · 타이포 위계 ◯  · 핵심 레버 1개 ◯
+       · Pretendard 단일 + 강한 weight 대비 (한글 브랜드 정답)
+       · 그린은 10%만 (em·올림 방향·액션)
+       ============================================================ */
+    :root {
+      --brand:        oklch(70% 0.17 152);
+      --brand-press:  oklch(60% 0.16 152);
+      --brand-bg:     oklch(96% 0.045 152);
+
+      --bg:        oklch(98% 0.006 152);
+      --surface:   oklch(99.5% 0.003 152);
+      --surface-2: oklch(96.5% 0.006 152);
+
+      --ink-900: oklch(22% 0.012 152);
+      --ink-700: oklch(40% 0.012 152);
+      --ink-500: oklch(56% 0.010 152);
+      --ink-400: oklch(68% 0.008 152);
+      --line:    oklch(91% 0.008 152);
+
+      /* 방향: 올림=그린 / 내림=앰버(빨강 아님) */
+      --up:      oklch(64% 0.15 152);
+      --down:    oklch(64% 0.13 58);
+      --down-bg: oklch(96.5% 0.035 70);
+      --down-ink:oklch(44% 0.10 55);
+
+      --font: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+
+      --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:20px; --s6:24px; --s8:32px; --s10:40px;
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:var(--font); background:oklch(94% 0.005 152); color:var(--ink-900);
+      -webkit-font-smoothing:antialiased; line-height:1.45; }
+    ul { list-style:none; }
+    a { color:inherit; text-decoration:none; }
+    em { font-style:normal; }
+
+    /* ---- 미리보기 캔버스 ---- */
+    .lab { max-width:840px; margin:0 auto; padding:48px 24px 96px; display:flex; gap:48px;
+      align-items:flex-start; flex-wrap:wrap; justify-content:center; }
+    .lab__intro { width:100%; text-align:center; margin-bottom:8px; }
+    .lab__intro h1 { font-size:1.375rem; font-weight:700; letter-spacing:-.02em; }
+    .lab__intro p { color:var(--ink-500); font-size:.8125rem; margin-top:6px; }
+
+    /* ---- 폰 프레임 ---- */
+    .phone { width:375px; background:var(--surface); border-radius:32px; overflow:hidden;
+      border:1px solid var(--line);
+      box-shadow:0 1px 0 oklch(100% 0 0) inset, 0 28px 70px -30px oklch(22% 0.05 152 / .28); }
+    .gnb { display:flex; align-items:center; gap:12px; padding:16px 20px 4px; }
+    .gnb__back { width:32px; height:32px; display:inline-flex; align-items:center; justify-content:center;
+      margin-left:-6px; color:var(--ink-700); }
+    .gnb__title { font-size:.9375rem; font-weight:600; }
+    .body { padding:8px 22px 26px; }
+
+    /* annotation chips in margin */
+    .note { width:220px; font-size:.75rem; color:var(--ink-500); line-height:1.6; }
+    .note h3 { font-size:.8125rem; color:var(--ink-900); font-weight:700; margin-bottom:4px; }
+    .note .n { display:inline-block; font-weight:700; color:var(--brand-press);
+      font-size:.6875rem; letter-spacing:.04em; margin-bottom:10px; }
+    .note + .note { margin-top:22px; }
+
+    /* ============================================================
+       ① 진단 헤더 — 판정 문장이 히어로 (숫자는 맥락)
+       ============================================================ */
+    .diag__kicker { font-size:.75rem; font-weight:600; letter-spacing:.02em; color:var(--ink-400);
+      margin:12px 0 14px; }
+    .verdict { font-size:1.75rem; font-weight:800; letter-spacing:-.03em; line-height:1.28;
+      color:var(--ink-900); }
+    .verdict em { color:var(--brand-press); }
+    /* 점수 참조 — 작고 조용하게 */
+    .scoreref { margin-top:20px; }
+    .scoreref__row { display:flex; align-items:baseline; gap:8px; }
+    .scoreref__pt { font-size:1.0625rem; font-weight:700; font-variant-numeric:tabular-nums; letter-spacing:-.01em; }
+    .scoreref__grade { font-size:.8125rem; font-weight:600; color:var(--brand-press);
+      background:var(--brand-bg); padding:2px 8px; border-radius:999px; }
+    .scoreref__rank { font-size:.8125rem; color:var(--ink-500); margin-left:auto; font-variant-numeric:tabular-nums; }
+    .scoreref__track { position:relative; height:4px; border-radius:999px; background:var(--surface-2); margin-top:10px; }
+    .scoreref__fill { position:absolute; inset:0 auto 0 0; width:82%; background:var(--brand); border-radius:999px; }
+    .scoreref__dot { position:absolute; top:50%; left:82%; width:11px; height:11px; border-radius:50%;
+      background:var(--surface); border:2.5px solid var(--brand); transform:translate(-50%,-50%);
+      box-shadow:0 1px 4px -1px oklch(22% 0 0 / .3); }
+
+    /* ============================================================
+       ② 핵심 레버 — 가장 누르는 요인 1개 (기억에 남는 모먼트)
+          tinted surface, no icon-box, 행동까지 연결
+       ============================================================ */
+    .lever { margin-top:28px; padding:20px; border-radius:20px;
+      background:var(--down-bg); }
+    .lever__tag { display:inline-flex; align-items:center; gap:6px; font-size:.75rem; font-weight:700;
+      color:var(--down-ink); letter-spacing:.01em; }
+    .lever__tag .ar { font-size:.875rem; line-height:1; }
+    .lever__name { font-size:1.3125rem; font-weight:800; letter-spacing:-.025em; line-height:1.3;
+      color:oklch(32% 0.06 55); margin:10px 0 8px; }
+    .lever__why { font-size:.875rem; color:var(--down-ink); line-height:1.5; max-width:30ch; }
+    .lever__act { display:inline-flex; align-items:center; gap:5px; margin-top:16px;
+      font-size:.875rem; font-weight:700; color:oklch(99% 0 0); background:var(--down);
+      padding:11px 16px; border-radius:12px; transition:transform .16s var(--ease); }
+    .lever__act:active { transform:scale(.98); }
+    .lever__act .ar { transition:transform .28s var(--ease); }
+    .lever__act:hover .ar { transform:translateX(3px); }
+
+    /* ============================================================
+       ③ 요인 리스트 — 타이포 리스트(카드 아님), 방향+강도
+          아이콘 박스 ✗, 동일카드 ✗, 헤어라인 구분
+       ============================================================ */
+    .factors { margin-top:28px; }
+    .factors__group + .factors__group { margin-top:24px; }
+    .factors__label { font-size:.75rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase;
+      color:var(--ink-400); margin-bottom:2px; }
+    .factor { display:grid; grid-template-columns:14px 1fr auto; gap:12px; align-items:baseline;
+      padding:15px 0; border-top:1px solid var(--line); }
+    .factors__group ul > .factor:first-child { border-top:none; }
+    .factor__dir { font-size:.8125rem; line-height:1.4; font-weight:900; }
+    .factor__dir.up { color:var(--up); }
+    .factor__dir.down { color:var(--down); }
+    .factor__main { min-width:0; }
+    .factor__name { font-size:.9375rem; font-weight:600; color:var(--ink-900); letter-spacing:-.005em; line-height:1.4; }
+    .factor__meta { font-size:.8125rem; color:var(--ink-500); margin-top:2px; }
+    .factor__meta b { font-weight:600; color:var(--ink-700); font-variant-numeric:tabular-nums; }
+    .factor__mag { font-size:.75rem; font-weight:600; color:var(--ink-400); white-space:nowrap;
+      letter-spacing:.01em; align-self:center; }
+    .factor__mag.is-strong { color:var(--ink-700); }
+
+    /* CTA */
+    .cta { margin-top:30px; width:100%; padding:16px; border-radius:14px; background:var(--brand);
+      color:oklch(24% 0.03 152); font-size:.9375rem; font-weight:700; border:0; cursor:pointer;
+      display:inline-flex; align-items:center; justify-content:center; gap:7px;
+      transition:background .16s var(--ease); }
+    .cta:hover { background:var(--brand-press); color:oklch(99% 0 0); }
+  </style>
+</head>
+<body>
+  <div class="lab">
+    <div class="lab__intro">
+      <h1>KCB 진단 · 에디토리얼 재설계 (impeccable v2)</h1>
+      <p>판정 문장 = 히어로 · 핵심 레버 1개 · 요인은 타이포 리스트 · Pretendard 단일 · 그린 10%</p>
+    </div>
+
+    <!-- 좌: 주석 -->
+    <div style="display:flex; flex-direction:column; padding-top:8px;">
+      <div class="note">
+        <span class="n">① 진단 헤더</span>
+        <h3>숫자가 아니라 "한 줄 판정"이 주인공</h3>
+        점수는 앞 화면에서 봤으니 여기선 맥락으로만. 게이지 템플릿 제거, 점수는 얇은 참조 바.
+      </div>
+      <div class="note">
+        <span class="n">② 핵심 레버</span>
+        <h3>가장 누르는 요인 1개에 몰아주기</h3>
+        대칭 강·약점 리스트 ✗. 행동 가능한 1순위를 컬러 면으로 띄우고 바로 액션 연결 → 페르소나 페이지로 이어짐.
+      </div>
+      <div class="note">
+        <span class="n">③ 요인 리스트</span>
+        <h3>카드 아님 · 리포트형 타이포 리스트</h3>
+        아이콘 박스/동일 카드 제거. 방향(↑/↓)+상대 강도. "+38점" 같은 가짜 정밀도 ✗ → 큼/중간(정직).
+      </div>
+    </div>
+
+    <!-- 우: 폰 -->
+    <div class="phone">
+      <div class="gnb">
+        <span class="gnb__back">
+          <svg width="16" height="16" viewBox="0 0 16 16"><path d="M10 3 5 8l5 5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <span class="gnb__title">내 점수 분석</span>
+      </div>
+      <div class="body">
+
+        <!-- ① 진단 헤더 -->
+        <p class="diag__kicker">KCB 신용점수 분석 · 2026.05.22</p>
+        <h1 class="verdict">상위권이지만,<br><em>한 가지</em>가 점수를<br>누르고 있어요</h1>
+
+        <div class="scoreref">
+          <div class="scoreref__row">
+            <span class="scoreref__pt">823점</span>
+            <span class="scoreref__grade">1등급</span>
+            <span class="scoreref__rank">상위 9%</span>
+          </div>
+          <div class="scoreref__track">
+            <span class="scoreref__fill"></span>
+            <span class="scoreref__dot"></span>
+          </div>
+        </div>
+
+        <!-- ② 핵심 레버 -->
+        <section class="lever">
+          <span class="lever__tag"><span class="ar">↓</span> 지금 점수를 가장 누르는 요인</span>
+          <h2 class="lever__name">대출이 3곳에 흩어져 있어요</h2>
+          <p class="lever__why">한 곳으로 모으면 이자 부담과 점수 영향을 함께 줄일 수 있어요.</p>
+          <a class="lever__act" href="#">갈아타기로 정리하기 <span class="ar">→</span></a>
+        </section>
+
+        <!-- ③ 요인 리스트 -->
+        <section class="factors">
+          <div class="factors__group">
+            <div class="factors__label">점수를 올려주는 것</div>
+            <ul>
+              <li class="factor">
+                <span class="factor__dir up">↑</span>
+                <span class="factor__main">
+                  <span class="factor__name">연체 없는 상환 이력</span>
+                  <span class="factor__meta">전국민 <b>18%</b>만 해당</span>
+                </span>
+                <span class="factor__mag is-strong">영향 큼</span>
+              </li>
+              <li class="factor">
+                <span class="factor__dir up">↑</span>
+                <span class="factor__main">
+                  <span class="factor__name">신용카드를 꾸준히 사용</span>
+                  <span class="factor__meta">평균 사용기간 <b>6.2년</b></span>
+                </span>
+                <span class="factor__mag">영향 중간</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="factors__group">
+            <div class="factors__label">더 챙기면 좋은 것</div>
+            <ul>
+              <li class="factor">
+                <span class="factor__dir down">↓</span>
+                <span class="factor__main">
+                  <span class="factor__name">카드 이용 수준이 높아요</span>
+                  <span class="factor__meta">한도 대비 <b>72%</b> 사용 중</span>
+                </span>
+                <span class="factor__mag">영향 중간</span>
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        <button class="cta" type="button">내 신용 관리하기 <span style="font-weight:700">→</span></button>
+
+      </div>
+    </div>
+  </div>
+</body>
+</html>

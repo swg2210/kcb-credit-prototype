@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>KCB 신용영향 요인 — 서비스 페이지</title>
+  <link rel="stylesheet" as="style" crossorigin
+    href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+  <style>
+    :root {
+      --font: 'Pretendard Variable', Pretendard, -apple-system, system-ui, sans-serif;
+      --green-500: #09AB49;
+      --green-100: #EEFFF2;
+      --npay-green: #00DE5A;
+      --gray-100: #F6F8FA;
+      --gray-200: #EDEFF2;
+      --gray-700: #767678;
+      --gray-800: #404048;
+      --gray-900: #1E1E23;
+      --neg: #E05A2B;
+      --neg-bg: #FFF3EE;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font);
+      background: #F0F2F5;
+      color: var(--gray-900);
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    /* ─── Phone Shell ─── */
+    .phone {
+      width: 393px;
+      height: 853px;
+      background: #fff;
+      border-radius: 28px;
+      border: 1px solid var(--gray-200);
+      box-shadow: 0 4px 32px -8px rgba(0,0,0,.14), 0 1px 6px -2px rgba(0,0,0,.08);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ─── Status bar ─── */
+    .status-bar {
+      height: 44px;
+      flex-shrink: 0;
+      background: #fff;
+      position: relative;
+    }
+    .status-bar-inner {
+      width: 375px;
+      height: 44px;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      overflow: hidden;
+    }
+
+    /* ─── Header close ─── */
+    .header-close {
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 0 20px;
+      flex-shrink: 0;
+    }
+    .header-close__btn {
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #000;
+      font-size: 18px;
+      line-height: 1;
+      background: none;
+      border: none;
+    }
+
+    /* ─── Naver Toolbar ─── */
+    .naver-toolbar {
+      width: 393px;
+      height: 84px;
+      flex-shrink: 0;
+      background: #fff;
+      position: relative;
+    }
+
+    /* ─── Scrollable body ─── */
+    .phone-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 11px 20px 0;
+    }
+
+    /* ─── Title area ─── */
+    .title-area {
+      margin-bottom: 24px;
+    }
+    .title {
+      font-size: 1.5rem;          /* 24px */
+      font-weight: 700;
+      line-height: 1.25;          /* 30px */
+      letter-spacing: -.03125em; /* -0.5px / 16 */
+      color: #000;
+      margin-bottom: 12px;
+    }
+    .title em {
+      color: var(--green-500);
+      font-style: normal;
+    }
+    .subtitle {
+      font-size: .9375rem;        /* 15px */
+      font-weight: 400;
+      line-height: 1.4;           /* 21px */
+      letter-spacing: -.02em;
+      color: var(--gray-700);
+    }
+
+    /* ─── Card list ─── */
+    .item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--gray-200);
+    }
+    .item:last-child { border-bottom: none; }
+
+    .icon {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .icon img { display: block; }
+
+    .content { flex: 1; min-width: 0; }
+
+    .row1 {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      flex-wrap: wrap;
+      margin-bottom: 3px;
+    }
+    .item-title {
+      font-size: .9375rem;
+      font-weight: 600;
+      color: var(--gray-900);
+      letter-spacing: -.02em;
+      line-height: 1.4;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      font-size: .6875rem;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+      white-space: nowrap;
+      flex-shrink: 0;
+      letter-spacing: -.01em;
+      line-height: 1.5;
+    }
+    .badge.pos { background: var(--green-100); color: var(--green-500); }
+    .badge.neg { background: var(--neg-bg); color: var(--neg); }
+
+    .sub {
+      font-size: .875rem;
+      color: var(--gray-700);
+      letter-spacing: -.02em;
+      line-height: 1.4;
+    }
+    .sub b { color: var(--gray-800); font-weight: 600; }
+
+    .chevron {
+      color: #C5C8CC;
+      font-size: 1rem;
+      flex-shrink: 0;
+      align-self: center;
+      margin-left: 4px;
+    }
+
+    .milestone {
+      margin-top: 7px;
+      padding: 8px 10px;
+      background: var(--gray-100);
+      border-radius: 8px;
+    }
+    .ms-text {
+      font-size: .75rem;
+      color: var(--gray-700);
+      letter-spacing: -.01em;
+      line-height: 1.4;
+    }
+    .ms-text b { color: var(--gray-800); font-weight: 600; }
+
+    /* ─── Button area ─── */
+    .btn-area {
+      padding: 16px 20px 28px;
+      flex-shrink: 0;
+      background: #fff;
+    }
+    .btn-primary {
+      display: block;
+      width: 100%;
+      height: 48px;
+      background: var(--npay-green);
+      border: none;
+      border-radius: 12px;
+      font-family: var(--font);
+      font-size: 1rem;            /* 16px */
+      font-weight: 700;
+      letter-spacing: -.02em;
+      color: #000;
+      cursor: pointer;
+      transition: filter .15s;
+    }
+    .btn-primary:hover { filter: brightness(.95); }
+    .btn-primary:active { filter: brightness(.9); }
+  </style>
+</head>
+<body>
+
+  <div class="phone">
+
+    <!-- Status bar: exact Figma absolute positions within 375px inner -->
+    <div class="status-bar">
+      <div class="status-bar-inner">
+        <!-- Time: left:21 top:13 w:54 h:21 -->
+        <span style="position:absolute;left:21px;top:13px;width:54px;height:21px;font-family:-apple-system,'SF Pro Text',sans-serif;font-size:14px;font-weight:600;letter-spacing:-0.28px;color:#000;text-align:center;line-height:21px;">9:41</span>
+        <!-- Battery: right:14.67 top:17.33 w:24.328 h:11.333 -->
+        <img src="https://www.figma.com/api/mcp/asset/117fd0c4-5734-4573-b15c-d76748ea29e0" style="position:absolute;right:14.67px;top:17.33px;width:24.328px;height:11.333px;display:block;" alt="">
+        <!-- WiFi: top:17.33 left:315.68 w:15.3 h:10.97 -->
+        <img src="https://www.figma.com/api/mcp/asset/c310eae5-36fc-42d7-a7b7-9bb2311627fc" style="position:absolute;top:17.33px;left:315.68px;width:15.3px;height:10.97px;display:block;" alt="">
+        <!-- Cellular: top:17.67 left:293.66 w:16.99 h:10.67 -->
+        <img src="https://www.figma.com/api/mcp/asset/0dfdbc2b-1ecd-415e-a64e-a30382d3d6f9" style="position:absolute;top:17.67px;left:293.66px;width:16.99px;height:10.67px;display:block;" alt="">
+      </div>
+    </div>
+
+    <!-- Header close (X) -->
+    <div class="header-close">
+      <button class="header-close__btn" aria-label="닫기" onclick="location.href='credit-score.html'">✕</button>
+    </div>
+
+    <!-- Scrollable body -->
+    <div class="phone-body">
+
+      <!-- Title + Subtitle -->
+      <div class="title-area">
+        <h1 class="title"><em>내 신용점수</em>에<br>영향을 주는 요인이에요</h1>
+        <p class="subtitle">요인을 개선하면 점수가 올라갈 수 있어요</p>
+      </div>
+
+      <!-- Card: 연체한 경험이 없어요 (긍정) -->
+      <div class="item pos">
+        <div class="icon"><img src="icons/icon_02.png" width="40" height="40" alt=""></div>
+        <div class="content">
+          <div class="row1">
+            <span class="item-title">연체한 경험이 없어요</span>
+            <span class="badge pos">긍정</span>
+          </div>
+          <div class="sub">전국민 <b>18%</b>만 해당돼요</div>
+        </div>
+        <span class="chevron">›</span>
+      </div>
+
+      <!-- Card: 신용카드 장기 보유 (긍정) -->
+      <div class="item pos">
+        <div class="icon"><img src="icons/icon_08.png" width="40" height="40" alt=""></div>
+        <div class="content">
+          <div class="row1">
+            <span class="item-title">신용카드 장기 보유</span>
+            <span class="badge pos">긍정</span>
+          </div>
+          <div class="sub">평균 보유기간 <b>6.2년</b></div>
+        </div>
+        <span class="chevron">›</span>
+      </div>
+
+      <!-- Card: 대출이 여러 곳에 분산 (부정 + milestone) -->
+      <div class="item neg">
+        <div class="icon"><img src="icons/icon_03.png" width="40" height="40" alt=""></div>
+        <div class="content">
+          <div class="row1">
+            <span class="item-title">대출이 여러 곳에 분산</span>
+            <span class="badge neg">부정</span>
+          </div>
+          <div class="sub">대출기관 <b>3곳 이상</b></div>
+          <div class="milestone">
+            <span class="ms-text">여러 대출을 하나로 합치면 <b>긍정 요인</b>이 될 수 있어요</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card: 현금서비스를 이용 중 (부정 + milestone) -->
+      <div class="item neg">
+        <div class="icon"><img src="icons/icon_07.png" width="40" height="40" alt=""></div>
+        <div class="content">
+          <div class="row1">
+            <span class="item-title">현금서비스를 이용 중</span>
+            <span class="badge neg">부정</span>
+          </div>
+          <div class="sub">전국민 <b>9%</b>가 해당돼요</div>
+          <div class="milestone">
+            <span class="ms-text">현금서비스를 끊으면 <b>긍정 요인</b>이 될 수 있어요</span>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /phone-body -->
+
+    <!-- CTA Button -->
+    <div class="btn-area">
+      <button class="btn-primary">신용점수 더 알아보기</button>
+    </div>
+
+    <!-- Naver Toolbar: exact Figma absolute positions -->
+    <div class="naver-toolbar">
+      <!-- Top border line -->
+      <img src="https://www.figma.com/api/mcp/asset/05d79276-6036-4cd2-aa56-7ac32315d920" style="position:absolute;top:0;left:0;right:0;width:100%;height:1px;display:block;" alt="">
+      <!-- Icons area: inset 11.9%/3.05%/52.38%/3.05% → top:10 right:12 bottom:44 left:12, h:30 -->
+      <div style="position:absolute;top:10px;left:12px;right:12px;height:30px;display:flex;align-items:center;justify-content:space-between;">
+        <!-- Naver N: 30x30 container, 20x20 image at 5,5 -->
+        <div style="width:30px;height:30px;position:relative;flex-shrink:0;">
+          <img src="https://www.figma.com/api/mcp/asset/606f6228-d2fd-4b27-b999-5911d7ffd8b6" style="position:absolute;top:5px;left:5px;width:20px;height:20px;display:block;" alt="">
+        </div>
+        <!-- Back: 30x30 container, 16.5x16 image at 7,7 -->
+        <div style="width:30px;height:30px;position:relative;flex-shrink:0;cursor:pointer;" onclick="location.href='credit-score.html'">
+          <img src="https://www.figma.com/api/mcp/asset/ff746e13-b8e4-43a4-95a8-66cdb455614c" style="position:absolute;top:7px;left:7px;width:16.5px;height:16px;display:block;" alt="">
+        </div>
+        <!-- Forward: same as back rotated 180deg -->
+        <div style="width:30px;height:30px;position:relative;flex-shrink:0;transform:rotate(180deg);">
+          <img src="https://www.figma.com/api/mcp/asset/f6c519be-c169-4510-b0fe-be549cfd4d9d" style="position:absolute;top:7px;left:7px;width:16.5px;height:16px;display:block;" alt="">
+        </div>
+        <!-- Greendot: 30x30 fills container -->
+        <div style="width:30px;height:30px;position:relative;flex-shrink:0;">
+          <img src="https://www.figma.com/api/mcp/asset/b1222925-deab-466d-a03e-ae5e43b27918" style="position:absolute;inset:0;width:100%;height:100%;display:block;" alt="">
+        </div>
+        <!-- Refresh: 30x30 fills container -->
+        <div style="width:30px;height:30px;position:relative;flex-shrink:0;">
+          <img src="https://www.figma.com/api/mcp/asset/872e88fe-7b94-40f6-b891-10e95405941b" style="position:absolute;inset:0;width:100%;height:100%;display:block;" alt="">
+        </div>
+        <!-- Share: 30x30 fills container -->
+        <div style="width:30px;height:30px;position:relative;flex-shrink:0;">
+          <img src="https://www.figma.com/api/mcp/asset/1badacdd-2532-4cf2-b701-a58037ab91fd" style="position:absolute;inset:0;width:100%;height:100%;display:block;" alt="">
+        </div>
+        <!-- Menu: 30x30 container, 20.5x7 image at top:12 left:5 -->
+        <div style="width:30px;height:30px;position:relative;flex-shrink:0;">
+          <img src="https://www.figma.com/api/mcp/asset/fb497e52-9923-4c12-b7bb-37bec457e6a1" style="position:absolute;top:12px;left:5px;width:20.5px;height:7px;display:block;" alt="">
+        </div>
+      </div>
+      <!-- Home indicator: top:calc(50%+30.5px) -translate-y-1/2 = center at 72.5px -->
+      <div style="position:absolute;top:calc(50% + 30.5px);left:50%;transform:translate(-50%,-50%);width:143px;height:5px;background:#000;border-radius:4px;"></div>
+    </div>
+
+  </div><!-- /phone -->
+
+</body>
+</html>

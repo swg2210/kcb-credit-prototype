@@ -1,0 +1,488 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#ffffff" />
+  <title>KCB 내 점수 분석 — Prototype</title>
+
+  <!-- Pretendard (body) -->
+  <link rel="stylesheet" as="style" crossorigin
+    href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+
+  <!-- Bricolage Grotesque (display + numbers) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..700&display=swap" />
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ============================================================
+       SVG ICON SPRITE
+       ============================================================ -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <!-- arrow back -->
+      <symbol id="i-back" viewBox="0 0 16 16">
+        <path d="M10 3 5 8l5 5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+      </symbol>
+      <!-- arrow right -->
+      <symbol id="i-arrow" viewBox="0 0 16 16">
+        <path d="M3 8h10m-4-4 4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+      </symbol>
+      <!-- shield / pos -->
+      <symbol id="i-shield" viewBox="0 0 24 24">
+        <path d="M12 3 5 5.5v6.2c0 4.2 3 7.7 7 9.3 4-1.6 7-5.1 7-9.3V5.5L12 3Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+        <path d="m9 12 2 2 4-4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+      </symbol>
+      <!-- card -->
+      <symbol id="i-card" viewBox="0 0 24 24">
+        <rect x="3" y="6" width="18" height="13" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.6"/>
+        <path d="M3 10h18" stroke="currentColor" stroke-width="1.6"/>
+        <path d="M7 15h3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+      </symbol>
+      <!-- chart -->
+      <symbol id="i-chart" viewBox="0 0 24 24">
+        <path d="M4 19h16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+        <path d="M7 15v-3M12 15V8M17 15v-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      </symbol>
+      <!-- alert -->
+      <symbol id="i-alert" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.6"/>
+        <path d="M12 7.5v5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        <circle cx="12" cy="16" r="1" fill="currentColor"/>
+      </symbol>
+      <!-- layers (multi) -->
+      <symbol id="i-layers" viewBox="0 0 24 24">
+        <path d="m12 3 9 5-9 5-9-5 9-5Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+        <path d="m3 13 9 5 9-5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+      </symbol>
+      <!-- trending-down -->
+      <symbol id="i-trenddown" viewBox="0 0 24 24">
+        <path d="m4 7 7 7 4-4 5 5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M14 15h6V9" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+      </symbol>
+      <!-- cash (현금서비스) -->
+      <symbol id="i-cash" viewBox="0 0 24 24">
+        <rect x="3" y="7" width="18" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/>
+        <circle cx="12" cy="12.5" r="2.4" fill="none" stroke="currentColor" stroke-width="1.6"/>
+        <path d="M6.5 10.5v.01M17.5 14.5v.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      </symbol>
+      <!-- pause / recover -->
+      <symbol id="i-recover" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.6"/>
+        <path d="M8 8v8M16 8v8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+      </symbol>
+      <!-- phone -->
+      <symbol id="i-phone" viewBox="0 0 24 24">
+        <path d="M5 4h3l1.7 4-2 1.5a11 11 0 0 0 6.8 6.8l1.5-2L20 16v3a2 2 0 0 1-2 2A15 15 0 0 1 3 6a2 2 0 0 1 2-2Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+      </symbol>
+      <!-- globe -->
+      <symbol id="i-globe" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.6"/>
+        <path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18" fill="none" stroke="currentColor" stroke-width="1.6"/>
+      </symbol>
+      <!-- spark / star (highlight) -->
+      <symbol id="i-spark" viewBox="0 0 24 24">
+        <path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M6 18l2.5-2.5M15.5 8.5 18 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+      </symbol>
+      <!-- doc -->
+      <symbol id="i-doc" viewBox="0 0 24 24">
+        <path d="M6 3h8l4 4v14H6z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+        <path d="M14 3v4h4M9 13h6M9 17h4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+      </symbol>
+    </defs>
+  </svg>
+
+  <!-- ============================================================
+       CANVAS
+       ============================================================ -->
+  <div class="canvas">
+
+    <header class="canvas__intro">
+      <h1>KCB 내 점수 분석</h1>
+      <p>진단 페이지 1 + 페르소나 페이지 4종 · Phase 1 프로토타입</p>
+    </header>
+
+    <nav class="devnav" aria-label="페이지 전환">
+      <button class="devnav__btn is-active" data-go="all">전체 보기</button>
+      <button class="devnav__btn" data-go="diag">진단</button>
+      <button class="devnav__btn" data-go="multi">MULTI_LOAN</button>
+      <button class="devnav__btn" data-go="rate">HIGH_RATE</button>
+      <button class="devnav__btn" data-go="card">SHORT_TERM_CARD</button>
+      <button class="devnav__btn" data-go="overdue">OVERDUE</button>
+    </nav>
+
+    <div class="frames" id="frames">
+
+      <!-- ========================================================
+           FRAME 1 — 진단 페이지
+           ======================================================== -->
+      <article class="frame is-active" data-view="diag" aria-label="내 점수 분석 진단 페이지">
+        <div class="frame__label">진단 / Diagnosis</div>
+        <div class="app">
+          <header class="gnb">
+            <button class="gnb__back" aria-label="뒤로">
+              <svg width="16" height="16"><use href="#i-back"/></svg>
+            </button>
+            <div class="gnb__title">내 점수 분석</div>
+            <span class="gnb__chip">KCB 분석</span>
+          </header>
+
+          <div class="scroll stagger">
+
+            <section class="diag-hero">
+              <p class="diag-hero__eyebrow">823점 · 1등급</p>
+              <h1 class="diag-hero__title">
+                내 점수가 <em>왜</em><br />
+                이런지 짚어드릴게요
+              </h1>
+              <p class="diag-hero__meta">기준일 2026.05.22 · KCB 분석</p>
+            </section>
+
+            <div class="section-h">
+              <div class="section-h__title">강점</div>
+              <div class="section-h__count">2 / 3</div>
+            </div>
+            <ul class="reasons">
+              <li class="reason">
+                <span class="reason__icon"><svg width="22" height="22"><use href="#i-shield"/></svg></span>
+                <div class="reason__body">
+                  <div class="reason__title">연체한 경험이 없어요</div>
+                  <div class="reason__meta">전국민 <b>18%</b>만 해당돼요</div>
+                </div>
+              </li>
+              <li class="reason">
+                <span class="reason__icon"><svg width="22" height="22"><use href="#i-card"/></svg></span>
+                <div class="reason__body">
+                  <div class="reason__title">신용카드를 꾸준히 잘 쓰고 있어요</div>
+                  <div class="reason__meta">평균 사용기간 <b>6.2년</b></div>
+                </div>
+              </li>
+            </ul>
+
+            <div class="section-h">
+              <div class="section-h__title">약점</div>
+              <div class="section-h__count">2 / 3</div>
+            </div>
+            <ul class="reasons">
+              <li class="reason reason--neg">
+                <span class="reason__icon"><svg width="22" height="22"><use href="#i-layers"/></svg></span>
+                <div class="reason__body">
+                  <div class="reason__title">대출이 여러 곳에 분산되어 있어요</div>
+                  <div class="reason__meta">대출기관 <b>3곳 이상</b></div>
+                </div>
+              </li>
+              <li class="reason reason--neg">
+                <span class="reason__icon"><svg width="22" height="22"><use href="#i-chart"/></svg></span>
+                <div class="reason__body">
+                  <div class="reason__title">카드 이용 수준이 다소 높아요</div>
+                  <div class="reason__meta">한도 대비 <b>72%</b> 사용 중</div>
+                </div>
+              </li>
+            </ul>
+
+          </div>
+
+          <div class="cta-area">
+            <button class="cta" type="button">
+              내 신용 관리하기
+              <svg class="cta__arrow" width="16" height="16"><use href="#i-arrow"/></svg>
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <!-- ========================================================
+           FRAME 2 — MULTI_LOAN
+           ======================================================== -->
+      <article class="frame" data-view="multi" aria-label="대출 갈아타기 페르소나 페이지">
+        <div class="frame__label">MULTI_LOAN / 대출 갈아타기</div>
+        <div class="app">
+          <header class="gnb">
+            <button class="gnb__back" aria-label="뒤로"><svg width="16" height="16"><use href="#i-back"/></svg></button>
+            <div class="gnb__title">대출 갈아타기</div>
+            <span class="gnb__chip">내 점수 분석 결과</span>
+          </header>
+
+          <div class="scroll stagger">
+
+            <div class="echo">
+              <span class="echo__icon"><svg width="22" height="22"><use href="#i-layers"/></svg></span>
+              <div class="echo__text">대출이 여러 곳에 분산되어 있어요</div>
+            </div>
+
+            <section class="prescr">
+              <p class="prescr__label">한 줄 처방</p>
+              <p class="prescr__text">
+                대출을 한 곳으로 모으면<br />
+                이자 부담을 줄일 수 있어요.
+              </p>
+            </section>
+
+            <section class="stats">
+              <p class="stats__lead">
+                <b>823점</b>인 분들은 평균적으로<br />
+                이런 조건을 받고 있어요
+              </p>
+              <div class="stats__grid">
+                <div class="stats__cell">
+                  <p class="stats__label">최저 금리</p>
+                  <p class="stats__value">4.21<span class="stats__unit">%</span></p>
+                </div>
+                <div class="stats__divider"></div>
+                <div class="stats__cell">
+                  <p class="stats__label">최대 한도</p>
+                  <p class="stats__value">1.2<span class="stats__unit">억</span></p>
+                </div>
+              </div>
+              <p class="stats__footnote">최근 30일 대출비교 매칭 통계 기준</p>
+            </section>
+
+          </div>
+
+          <div class="cta-area">
+            <button class="cta" type="button">
+              대출 갈아타기 비교하기
+              <svg class="cta__arrow" width="16" height="16"><use href="#i-arrow"/></svg>
+            </button>
+            <p class="foot" style="padding:12px 0 0">
+              * 매칭 조건은 신청 시 변동될 수 있어요. 광고성 정보는 아니에요.
+            </p>
+          </div>
+        </div>
+      </article>
+
+      <!-- ========================================================
+           FRAME 3 — HIGH_RATE_DEPENDENT
+           ======================================================== -->
+      <article class="frame" data-view="rate" aria-label="저금리로 갈아타기 페르소나 페이지">
+        <div class="frame__label">HIGH_RATE_DEPENDENT / 저금리로 갈아타기</div>
+        <div class="app">
+          <header class="gnb">
+            <button class="gnb__back" aria-label="뒤로"><svg width="16" height="16"><use href="#i-back"/></svg></button>
+            <div class="gnb__title">저금리로 갈아타기</div>
+            <span class="gnb__chip">내 점수 분석 결과</span>
+          </header>
+
+          <div class="scroll stagger">
+
+            <div class="echo">
+              <span class="echo__icon"><svg width="22" height="22"><use href="#i-trenddown"/></svg></span>
+              <div class="echo__text">비은행 중·고금리 대출을 보유하고 있어요</div>
+            </div>
+
+            <section class="prescr">
+              <p class="prescr__label">한 줄 처방</p>
+              <p class="prescr__text">
+                지금 대출의 금리가 높을 수 있어요.<br />
+                더 낮은 금리 상품을 찾아볼 수 있어요.
+              </p>
+            </section>
+
+            <section class="stats">
+              <p class="stats__lead">
+                <b>823점</b>인 분들은 평균적으로<br />
+                이런 조건을 받고 있어요
+              </p>
+              <div class="stats__grid">
+                <div class="stats__cell stats__cell--hi">
+                  <p class="stats__label stats__label--hi">
+                    <svg width="11" height="11" style="opacity:.9"><use href="#i-spark"/></svg>
+                    최저 금리
+                  </p>
+                  <p class="stats__value stats__value--hi">3.42<span class="stats__unit">%</span></p>
+                </div>
+                <div class="stats__divider"></div>
+                <div class="stats__cell">
+                  <p class="stats__label">최대 한도</p>
+                  <p class="stats__value">1.2<span class="stats__unit">억</span></p>
+                </div>
+              </div>
+              <p class="stats__footnote">최근 30일 저금리 상품 매칭 통계 기준</p>
+            </section>
+
+          </div>
+
+          <div class="cta-area">
+            <button class="cta" type="button">
+              저금리 대출 비교하기
+              <svg class="cta__arrow" width="16" height="16"><use href="#i-arrow"/></svg>
+            </button>
+            <p class="foot" style="padding:12px 0 0">
+              * 매칭 조건은 신청 시 변동될 수 있어요.
+            </p>
+          </div>
+        </div>
+      </article>
+
+      <!-- ========================================================
+           FRAME 4 — SHORT_TERM_CARD_LOAN
+           ======================================================== -->
+      <article class="frame" data-view="card" aria-label="현금서비스 정리하기 페르소나 페이지">
+        <div class="frame__label">SHORT_TERM_CARD_LOAN / 현금서비스 정리하기</div>
+        <div class="app">
+          <header class="gnb">
+            <button class="gnb__back" aria-label="뒤로"><svg width="16" height="16"><use href="#i-back"/></svg></button>
+            <div class="gnb__title">현금서비스 정리하기</div>
+            <span class="gnb__chip">내 점수 분석 결과</span>
+          </header>
+
+          <div class="scroll stagger">
+
+            <div class="echo">
+              <span class="echo__icon"><svg width="22" height="22"><use href="#i-cash"/></svg></span>
+              <div class="echo__text">현금서비스·카드론을 이용 중이에요</div>
+            </div>
+
+            <section class="prescr">
+              <p class="prescr__label">한 줄 처방</p>
+              <p class="prescr__text">
+                현금서비스는 신용점수에 부담이 돼요.<br />
+                신용대출로 옮기면 부담을 줄일 수 있어요.
+              </p>
+            </section>
+
+            <section class="stats">
+              <p class="stats__lead">
+                <b>823점</b>인 분들은 신용대출에서<br />
+                이런 조건을 받고 있어요
+              </p>
+              <div class="stats__grid">
+                <div class="stats__cell stats__cell--hi">
+                  <p class="stats__label stats__label--hi">
+                    <svg width="11" height="11" style="opacity:.9"><use href="#i-spark"/></svg>
+                    최저 금리
+                  </p>
+                  <p class="stats__value stats__value--hi">4.12<span class="stats__unit">%</span></p>
+                </div>
+                <div class="stats__divider"></div>
+                <div class="stats__cell">
+                  <p class="stats__label">최대 한도</p>
+                  <p class="stats__value">8,000<span class="stats__unit">만</span></p>
+                </div>
+              </div>
+              <p class="stats__footnote">최근 30일 신용대출 매칭 통계 기준</p>
+            </section>
+
+          </div>
+
+          <div class="cta-area">
+            <button class="cta" type="button">
+              신용대출 비교하기
+              <svg class="cta__arrow" width="16" height="16"><use href="#i-arrow"/></svg>
+            </button>
+            <p class="foot" style="padding:12px 0 0">
+              * 한도·금리는 신청 시 신용평가 결과에 따라 달라질 수 있어요.
+            </p>
+          </div>
+        </div>
+      </article>
+
+      <!-- ========================================================
+           FRAME 5 — OVERDUE_CURRENT (recover theme)
+           ======================================================== -->
+      <article class="frame frame--recover" data-view="overdue" aria-label="연체 관리하기 페르소나 페이지">
+        <div class="frame__label">OVERDUE_CURRENT / 연체 관리하기</div>
+        <div class="app">
+          <header class="gnb">
+            <button class="gnb__back" aria-label="뒤로"><svg width="16" height="16"><use href="#i-back"/></svg></button>
+            <div class="gnb__title">연체 관리하기</div>
+            <span class="gnb__chip">내 점수 분석 결과</span>
+          </header>
+
+          <div class="scroll stagger">
+
+            <div class="echo">
+              <span class="echo__icon"><svg width="22" height="22"><use href="#i-alert"/></svg></span>
+              <div class="echo__text">현재 연체 정보가 있어요</div>
+            </div>
+
+            <section class="prescr">
+              <p class="prescr__label">한 줄 처방</p>
+              <p class="prescr__text" style="color:var(--recover-ink)">
+                연체는 점수에 가장 큰 영향을 줘요.<br />
+                먼저 상환을 정리하면 회복이 시작돼요.
+              </p>
+            </section>
+
+            <section class="helpline">
+              <div class="helpline__row">
+                <span class="helpline__icon"><svg width="22" height="22"><use href="#i-phone"/></svg></span>
+                <div class="helpline__body">
+                  <div class="helpline__title">신용회복위원회 <b>1397</b></div>
+                  <div class="helpline__desc">채무조정·신용회복 무료 상담</div>
+                </div>
+              </div>
+              <div class="helpline__actions">
+                <button class="helpline__btn" type="button">
+                  <svg width="14" height="14"><use href="#i-phone"/></svg>
+                  전화 걸기
+                </button>
+                <button class="helpline__btn" type="button">
+                  <svg width="14" height="14"><use href="#i-globe"/></svg>
+                  웹사이트
+                </button>
+              </div>
+            </section>
+
+            <div class="cards">
+              <button class="cards__item" type="button">
+                <span>연체가 점수에 미치는 영향</span>
+                <svg width="14" height="14"><use href="#i-arrow"/></svg>
+              </button>
+              <button class="cards__item" type="button">
+                <span>채무조정 제도 한눈에 보기</span>
+                <svg width="14" height="14"><use href="#i-arrow"/></svg>
+              </button>
+            </div>
+
+          </div>
+
+          <div class="cta-area">
+            <button class="cta cta--recover" type="button">
+              <svg width="16" height="16"><use href="#i-doc"/></svg>
+              신용회복 가이드 보기
+            </button>
+            <p class="foot" style="padding:12px 0 0">
+              * 본 정보는 일반 안내로, 개별 상담은 금융기관 또는 신복위에 문의해 주세요.
+            </p>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+
+  <!-- ============================================================
+       Dev nav switch
+       ============================================================ -->
+  <script>
+    (function () {
+      const nav = document.querySelector('.devnav');
+      const frames = document.getElementById('frames');
+      const btns = nav.querySelectorAll('.devnav__btn');
+      const articles = frames.querySelectorAll('.frame');
+
+      nav.addEventListener('click', (e) => {
+        const btn = e.target.closest('.devnav__btn');
+        if (!btn) return;
+        btns.forEach(b => b.classList.toggle('is-active', b === btn));
+        const target = btn.dataset.go;
+        if (target === 'all') {
+          frames.classList.remove('is-focused');
+          articles.forEach(a => a.classList.remove('is-active'));
+          articles[0].classList.add('is-active');
+        } else {
+          frames.classList.add('is-focused');
+          articles.forEach(a => a.classList.toggle('is-active', a.dataset.view === target));
+        }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    })();
+  </script>
+</body>
+</html>

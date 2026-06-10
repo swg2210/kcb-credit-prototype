@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>KCB 신용점수 — 최근점수</title>
+  <link rel="stylesheet" as="style" crossorigin
+    href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Pretendard Variable', Pretendard, -apple-system, system-ui, sans-serif;
+      background: #F0F2F5;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+    .phone {
+      width: 375px;
+      height: 812px;
+      background: #fff;
+      border-radius: 28px;
+      border: 1px solid #EDEFF2;
+      box-shadow: 0 4px 32px -8px rgba(0,0,0,.14), 0 1px 6px -2px rgba(0,0,0,.08);
+      overflow: hidden;
+      position: relative;
+    }
+    p { margin: 0; }
+    a { text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="phone">
+
+    <!-- ═══ STATUS BAR (top:0 h:44) ═══ -->
+    <div style="position:absolute;top:0;left:0;width:375px;height:44px;background:#fff;">
+      <span style="position:absolute;left:21px;top:13px;font-size:14px;font-weight:600;letter-spacing:-0.28px;color:#000;line-height:21px;white-space:nowrap;">9:41</span>
+      <img src="https://www.figma.com/api/mcp/asset/27dc7f43-36fe-46f8-8e24-0c0799354b78"
+           style="position:absolute;right:14.67px;top:17.33px;width:24.328px;height:11.333px;display:block;" alt="">
+      <img src="https://www.figma.com/api/mcp/asset/3d3282e7-6145-4032-b953-d301f733ecd9"
+           style="position:absolute;top:17.33px;left:315.68px;width:15.3px;height:10.97px;display:block;" alt="">
+      <img src="https://www.figma.com/api/mcp/asset/1f8f9e2b-399e-41e7-b01f-d39b20aeb2df"
+           style="position:absolute;top:17.67px;left:293.66px;width:16.99px;height:10.67px;display:block;" alt="">
+    </div>
+
+    <!-- ═══ HEADER (top:74 h:63) ═══ -->
+    <div style="position:absolute;top:74px;left:0;width:375px;height:63px;overflow:hidden;background:#fff;">
+      <!-- 변동·조회 title: centered at x=187.5+0.5 -->
+      <p style="position:absolute;top:0;left:calc(50% + 0.5px);transform:translateX(-50%);
+                font-size:18px;font-weight:700;line-height:24px;letter-spacing:-0.45px;
+                color:#222;white-space:nowrap;">변동·조회</p>
+      <!-- Back button: left:15, top:2 (= 76-74), h:18, w:68 -->
+      <div style="position:absolute;top:2px;left:15px;width:68px;height:18px;display:flex;align-items:center;gap:6px;">
+        <img src="https://www.figma.com/api/mcp/asset/23d5cae1-2713-4853-a508-ec64f33cd7b0"
+             style="display:block;width:10px;height:18px;flex-shrink:0;" alt="">
+        <p style="font-size:15px;font-weight:500;line-height:18px;letter-spacing:-0.5px;color:#222;white-space:nowrap;">신용점수</p>
+      </div>
+    </div>
+
+    <!-- ═══ KCB/NICE TABS (top:117 h:41) ═══ -->
+    <div style="position:absolute;top:117px;left:0;width:375px;height:41px;background:#fff;">
+      <!-- KCB tab (active): left:20, w:167 -->
+      <div style="position:absolute;top:0;left:20px;width:167px;height:41px;">
+        <p style="position:absolute;top:9px;left:0;right:0;text-align:center;
+                  font-size:16px;font-weight:700;line-height:22px;letter-spacing:-0.5px;color:#1e1e23;">KCB</p>
+        <div style="position:absolute;bottom:0;left:0;right:0;height:2px;background:#1e1e23;"></div>
+      </div>
+      <!-- NICE tab (inactive): left:188, w:167 -->
+      <div style="position:absolute;top:0;left:188px;width:167px;height:41px;">
+        <p style="position:absolute;top:9px;left:0;right:0;text-align:center;
+                  font-size:16px;font-weight:400;line-height:22px;letter-spacing:-0.5px;color:#929294;">NICE</p>
+        <div style="position:absolute;bottom:0;left:0;right:0;height:1px;background:#efeff0;"></div>
+      </div>
+    </div>
+
+    <!-- ═══ SUB-TABS PILL (top:188 h:40) ═══ -->
+    <!-- Pill background: left:49, w:278, h:40, radius:22 -->
+    <div style="position:absolute;top:188px;left:49px;width:278px;height:40px;
+                background:#f0f2f4;border:1px solid rgba(0,0,0,0.02);border-radius:22px;">
+      <!-- Active pill: left:5, top:4, w:93, h:32, radius:30 -->
+      <div style="position:absolute;top:4px;left:5px;width:93px;height:32px;
+                  background:#fff;border-radius:30px;
+                  box-shadow:0 2px 4px 0 rgba(0,0,0,0.1);"></div>
+    </div>
+    <!-- Tab texts (positioned relative to frame for exact Figma coords) -->
+    <!-- 최근점수: centered at x=99.42 -->
+    <p style="position:absolute;top:199px;left:99.42px;transform:translateX(-50%);
+              font-size:14px;font-weight:700;letter-spacing:-0.5px;color:#303038;
+              white-space:nowrap;">최근점수</p>
+    <!-- 조회이력: centered at x=189.36 -->
+    <p style="position:absolute;top:199px;left:189.36px;transform:translateX(-50%);
+              font-size:14px;font-weight:600;letter-spacing:-0.5px;color:#929294;
+              white-space:nowrap;">조회이력</p>
+    <!-- 변동내역: centered at x=274 -->
+    <p style="position:absolute;top:199px;left:274px;transform:translateX(-50%);
+              font-size:14px;font-weight:600;letter-spacing:-0.5px;color:#929294;
+              white-space:nowrap;">변동내역</p>
+
+    <!-- ═══ SCORE SECTION (top:262) ═══ -->
+    <!-- 타이틀 전체가 service-page.html로 이동하는 클릭 영역 -->
+    <a href="service-page.html" style="position:absolute;top:262px;left:20px;
+       text-decoration:none;display:block;
+       font-size:20px;font-weight:700;letter-spacing:-0.9091px;line-height:0;">
+      <p style="line-height:28px;color:#1e1e23;">오늘 내 신용점수는</p>
+      <p style="line-height:28px;">
+        <span style="font-size:20px;font-weight:700;color:#09aa5c;">931점</span><span
+          style="font-size:20px;font-weight:700;color:#1e1e23;">인 이유 확인하기</span><span
+          style="font-size:18px;font-weight:400;color:#09aa5c;"> ›</span>
+      </p>
+    </a>
+    <!-- 점수내역 text: right side, top:263.7 -->
+    <p style="position:absolute;top:263.7px;right:40px;
+              font-size:15px;font-weight:500;line-height:21px;letter-spacing:-0.3px;color:#929294;
+              white-space:nowrap;">점수내역</p>
+    <!-- ⓘ icon: top:266.2, left:340, 15×15 -->
+    <div style="position:absolute;top:266.2px;left:340px;width:15px;height:15px;">
+      <img src="https://www.figma.com/api/mcp/asset/93285b0c-d827-473f-a31e-af3cc2f75914"
+           style="display:block;width:100%;height:100%;" alt="">
+    </div>
+
+    <!-- ═══ TODAY BAR (top:348, h:32) ═══ -->
+    <!-- "오늘" label: left:20, top:354 -->
+    <p style="position:absolute;top:354px;left:20px;
+              font-size:16px;font-weight:700;line-height:20px;letter-spacing:-0.5px;color:#09aa5c;
+              white-space:nowrap;">오늘</p>
+    <!-- Green bar: left:80, top:348, w:173, h:32 -->
+    <div style="position:absolute;top:348px;left:80px;width:173px;height:32px;
+                background:#00de5a;border-radius:2px;"></div>
+    <!-- Score "931": left:259, top:356 -->
+    <p style="position:absolute;top:356px;left:259px;
+              font-size:16px;font-weight:700;line-height:16px;letter-spacing:-0.5714px;color:#09aa5c;
+              white-space:nowrap;z-index:2;">931</p>
+
+    <!-- ═══ LOAN CTA BUTTON (top:390, h:62, left:80, w:275) ═══ -->
+    <div style="position:absolute;top:390px;left:80px;width:275px;height:62px;
+                background:#f6f8fa;border-radius:4px;">
+      <!-- Loan icon: left:12, top:19, 24×24 -->
+      <div style="position:absolute;left:12px;top:19px;width:24px;height:24px;overflow:hidden;">
+        <img src="https://www.figma.com/api/mcp/asset/81b8ac42-1118-446e-96a2-853ae457b7c7"
+             style="display:block;width:100%;height:100%;object-fit:contain;" alt="">
+      </div>
+      <!-- Main text -->
+      <p style="position:absolute;top:12px;left:42px;
+                font-size:13px;font-weight:400;line-height:19px;letter-spacing:-0.3px;color:#1e1e23;
+                white-space:nowrap;">
+        <span style="font-weight:700;">931점</span>으로 <span style="font-weight:700;">내 최저금리</span> 대출 비교하기
+      </p>
+      <!-- Sub text -->
+      <p style="position:absolute;top:31px;left:42px;
+                font-size:13px;font-weight:400;line-height:19px;letter-spacing:-0.3px;color:#929294;
+                white-space:nowrap;">이자 지원금 최대 15만원 적립</p>
+      <!-- Arrow (IcTxtArrowSmall ≈ thin chevron) -->
+      <div style="position:absolute;right:10px;top:50%;transform:translateY(-50%);
+                  width:24px;height:24px;display:flex;align-items:center;justify-content:center;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <path d="M9 6L15 12L9 18" stroke="#1E1E23" stroke-width="1.5"
+                stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- ═══ HISTORICAL BARS ═══ -->
+
+    <!-- 11.19 (top:477, bar w:173, 1등급) -->
+    <p style="position:absolute;top:483.5px;left:20px;
+              font-size:14px;font-weight:400;line-height:20px;letter-spacing:-0.3733px;color:#929294;
+              white-space:nowrap;">11. 19</p>
+    <div style="position:absolute;top:477px;left:80px;width:173px;height:32px;
+                background:#d7f1e9;border-radius:2px;"></div>
+    <p style="position:absolute;top:485px;left:259px;
+              font-size:16px;font-weight:400;line-height:16px;letter-spacing:-0.5714px;color:#767678;
+              white-space:nowrap;z-index:2;">931</p>
+
+    <!-- 11.18 (top:534, bar w:146, 1등급) -->
+    <p style="position:absolute;top:540px;left:20px;
+              font-size:14px;font-weight:400;line-height:20px;letter-spacing:-0.3733px;color:#929294;
+              white-space:nowrap;">11.18</p>
+    <div style="position:absolute;top:534px;left:80px;width:146px;height:32px;
+                background:#d7f1e9;border-radius:2px;"></div>
+    <p style="position:absolute;top:542px;left:230px;
+              font-size:16px;font-weight:400;line-height:16px;letter-spacing:-0.5714px;color:#767678;
+              white-space:nowrap;z-index:2;">855</p>
+
+    <!-- 11.17 (top:591, bar w:146) -->
+    <p style="position:absolute;top:597px;left:20px;
+              font-size:14px;font-weight:400;line-height:20px;letter-spacing:-0.3733px;color:#929294;
+              white-space:nowrap;">11.17</p>
+    <div style="position:absolute;top:591px;left:80px;width:146px;height:32px;
+                background:#d7f1e9;border-radius:2px;"></div>
+    <p style="position:absolute;top:599px;left:230px;
+              font-size:16px;font-weight:400;line-height:16px;letter-spacing:-0.5714px;color:#767678;
+              white-space:nowrap;z-index:2;">855</p>
+
+    <!-- 11.15 최고 (top:648, bar w:226, bright green) -->
+    <p style="position:absolute;top:654px;left:20px;
+              font-size:14px;font-weight:400;line-height:20px;letter-spacing:-0.3733px;color:#929294;
+              white-space:nowrap;">11.15</p>
+    <div style="position:absolute;top:648px;left:80px;width:226px;height:32px;
+                background:#13db77;border-radius:2px;"></div>
+
+    <!-- "최고" tooltip badge: top:632, left:322, 32×19 -->
+    <div style="position:absolute;top:632px;left:322px;width:32px;height:19px;overflow:hidden;z-index:10;">
+      <!-- Badge body -->
+      <div style="position:absolute;top:0;left:0;right:0;bottom:3px;background:#444;border-radius:8px;"></div>
+      <!-- Arrow (rotated square at bottom-center) -->
+      <div style="position:absolute;bottom:0;left:50%;transform:translateX(-50%) rotate(45deg);
+                  width:5px;height:5px;background:#444;"></div>
+      <!-- "최고" text -->
+      <span style="position:absolute;top:calc(50% - 1.5px);left:50%;
+                   transform:translate(-50%,-50%);
+                   font-size:11px;font-weight:700;color:#fff;white-space:nowrap;letter-spacing:-0.44px;">최고</span>
+    </div>
+
+    <!-- "1,000" score text: left:312, top:655 -->
+    <p style="position:absolute;top:655px;left:312px;
+              font-size:18px;font-weight:700;line-height:16px;letter-spacing:-0.6429px;color:#00b75c;
+              white-space:nowrap;z-index:2;">1,000</p>
+
+    <!-- 11.15 (top:705, bar w:146) -->
+    <p style="position:absolute;top:711px;left:20px;
+              font-size:14px;font-weight:400;line-height:20px;letter-spacing:-0.3733px;color:#929294;
+              white-space:nowrap;">11.15</p>
+    <div style="position:absolute;top:705px;left:80px;width:146px;height:32px;
+                background:#d7f1e9;border-radius:2px;"></div>
+    <p style="position:absolute;top:712px;left:230px;
+              font-size:16px;font-weight:400;line-height:16px;letter-spacing:-0.5714px;color:#767678;
+              white-space:nowrap;z-index:2;">855</p>
+
+    <!-- 25.03.25 (top:731) -->
+    <p style="position:absolute;top:731px;left:20px;
+              font-size:14px;font-weight:400;line-height:20px;letter-spacing:-0.3733px;color:#929294;
+              white-space:nowrap;">25.03.25</p>
+    <p style="position:absolute;top:733px;left:230px;
+              font-size:16px;font-weight:400;line-height:16px;letter-spacing:-0.5714px;color:#767678;
+              white-space:nowrap;z-index:2;">855</p>
+
+
+
+    <!-- ═══ MASK / FADE EFFECT (top:~735 = 90.52% × 812) ═══ -->
+    <div style="position:absolute;top:735px;left:0;right:0;bottom:0;pointer-events:none;z-index:5;
+                -webkit-mask-image:url('https://www.figma.com/api/mcp/asset/b1474534-86d5-4970-a2b0-3062781c1cc4');
+                -webkit-mask-size:375px 77px;-webkit-mask-repeat:no-repeat;
+                mask-image:url('https://www.figma.com/api/mcp/asset/b1474534-86d5-4970-a2b0-3062781c1cc4');
+                mask-size:375px 77px;mask-repeat:no-repeat;overflow:hidden;">
+      <img src="https://www.figma.com/api/mcp/asset/09079555-2cd6-4102-af6f-e15760d9db09"
+           style="display:block;width:375px;height:77px;max-width:none;" alt="">
+    </div>
+
+    <!-- ═══ CREDIT INQUIRY SECTION (top:810–852) ═══ -->
+    <!-- Top divider -->
+    <div style="position:absolute;top:810px;left:73px;width:282px;height:1px;
+                background:rgba(0,0,0,0.05);"></div>
+
+    <!-- Inquiry row: 03.30 / 오케이저축은행 / 융자/대출 -->
+    <p style="position:absolute;top:832px;left:20px;
+              font-size:15px;font-weight:400;line-height:17px;letter-spacing:-0.5px;color:#999;
+              white-space:nowrap;">03.30</p>
+    <p style="position:absolute;top:833px;left:73px;
+              font-size:16px;font-weight:700;line-height:17px;letter-spacing:-0.5333px;color:#303038;
+              white-space:nowrap;">오케이저축은행</p>
+    <p style="position:absolute;top:831px;right:20px;
+              font-size:16px;font-weight:400;line-height:18px;letter-spacing:-0.5px;color:#09aa5c;
+              white-space:nowrap;">융자/대출</p>
+
+    <!-- Bottom divider -->
+    <div style="position:absolute;top:850px;left:73px;width:282px;height:1px;
+                background:rgba(0,0,0,0.05);"></div>
+
+  </div><!-- /phone -->
+</body>
+</html>

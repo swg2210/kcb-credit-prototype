@@ -1,0 +1,525 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>진입 방식 쇼케이스</title>
+  <link rel="stylesheet" as="style" crossorigin
+    href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Pretendard Variable', Pretendard, -apple-system, system-ui, sans-serif;
+      background: #F0F2F5;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      padding: 48px 32px 64px;
+    }
+    h1 {
+      font-size: 22px; font-weight: 700; color: #1e1e23;
+      letter-spacing: -0.5px; margin-bottom: 6px;
+    }
+    .subtitle {
+      font-size: 14px; color: #929294; letter-spacing: -0.3px; margin-bottom: 40px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, 300px);
+      gap: 32px;
+      justify-content: center;
+    }
+    .card {
+      display: flex; flex-direction: column; align-items: center; gap: 16px;
+    }
+    .card-label {
+      width: 100%;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .badge {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.5px;
+      background: #1e1e23; color: #fff;
+      padding: 3px 8px; border-radius: 4px;
+      text-transform: uppercase;
+    }
+    .badge.current { background: #09aa5c; }
+    .card-title {
+      font-size: 14px; font-weight: 600; color: #1e1e23; letter-spacing: -0.3px;
+    }
+    .card-desc {
+      font-size: 12px; color: #929294; letter-spacing: -0.2px; line-height: 1.5;
+      margin-top: 6px;
+    }
+
+    /* ── 폰 프레임 ── */
+    .phone {
+      width: 300px;
+      background: #fff;
+      border-radius: 22px;
+      border: 1px solid #EDEFF2;
+      box-shadow: 0 4px 24px -6px rgba(0,0,0,.12), 0 1px 4px -1px rgba(0,0,0,.07);
+      overflow: hidden;
+    }
+
+    /* ── 공통 레이아웃 블록 ── */
+    .ph-statusbar {
+      height: 35px; background: #fff;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 17px;
+    }
+    .ph-statusbar .time { font-size: 11px; font-weight: 600; color: #000; }
+    .ph-statusbar .icons { display: flex; gap: 4px; align-items: center; }
+    .ph-statusbar .icons span {
+      display: inline-block; background: #000; border-radius: 1px;
+    }
+    .bar-signal { width: 3px; height: 8px; }
+    .bar-wifi   { width: 10px; height: 7px; border-radius: 50% 50% 0 0; background: transparent !important;
+                  border: 1.5px solid #000; border-bottom: none; }
+    .bar-batt   { width: 14px; height: 8px; border: 1.5px solid #000; border-radius: 2px; background: transparent !important; position: relative; }
+    .bar-batt::after { content: ''; position: absolute; right: -4px; top: 2px; width: 2px; height: 4px; background: #000; border-radius: 0 1px 1px 0; }
+    .bar-batt-fill { position: absolute; left: 2px; top: 2px; width: 8px; bottom: 2px; background: #000; border-radius: 1px; }
+
+    .ph-header {
+      height: 50px; background: #fff;
+      display: flex; align-items: center; justify-content: center;
+      position: relative; border-bottom: none;
+    }
+    .ph-header .back {
+      position: absolute; left: 12px;
+      display: flex; align-items: center; gap: 4px;
+      font-size: 12px; font-weight: 500; color: #222; letter-spacing: -0.4px;
+    }
+    .ph-header .back svg { flex-shrink: 0; }
+    .ph-header .title {
+      font-size: 14px; font-weight: 700; color: #222; letter-spacing: -0.36px;
+    }
+
+    .ph-tabs {
+      height: 33px; background: #fff;
+      display: flex; border-bottom: 1px solid #efeff0;
+    }
+    .ph-tab {
+      flex: 1; display: flex; align-items: center; justify-content: center;
+      font-size: 13px; letter-spacing: -0.4px; color: #929294; font-weight: 400;
+      position: relative;
+    }
+    .ph-tab.active { font-weight: 700; color: #1e1e23; }
+    .ph-tab.active::after {
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+      background: #1e1e23;
+    }
+
+    .ph-subtab {
+      height: 32px; margin: 10px 16px; background: #f0f2f4;
+      border-radius: 18px; display: flex; align-items: center; padding: 0 4px;
+    }
+    .ph-subtab-item {
+      flex: 1; height: 24px; display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 600; color: #929294; border-radius: 14px;
+      letter-spacing: -0.4px;
+    }
+    .ph-subtab-item.active {
+      background: #fff; color: #303038;
+      box-shadow: 0 2px 3px rgba(0,0,0,0.08);
+    }
+
+    .ph-score-area { padding: 16px 16px 0; }
+    .ph-score-line1 { font-size: 16px; font-weight: 700; color: #1e1e23; letter-spacing: -0.7px; line-height: 22px; }
+    .ph-score-line2 { font-size: 16px; font-weight: 700; line-height: 22px; letter-spacing: -0.7px; }
+    .ph-score-green { color: #09aa5c; }
+
+    .ph-today-row {
+      display: flex; align-items: center; gap: 0;
+      padding: 0 16px; margin-top: 16px; height: 26px;
+    }
+    .ph-today-label { font-size: 13px; font-weight: 700; color: #09aa5c; width: 46px; letter-spacing: -0.4px; }
+    .ph-today-bar { height: 26px; background: #00de5a; border-radius: 2px; flex: 0 0 138px; }
+    .ph-today-score { font-size: 13px; font-weight: 700; color: #09aa5c; margin-left: 10px; letter-spacing: -0.46px; }
+
+    .ph-hist {
+      padding: 0 16px; margin-top: 8px;
+    }
+    .ph-hist-row { display: flex; align-items: center; height: 24px; margin-bottom: 4px; }
+    .ph-hist-date { font-size: 11px; color: #929294; width: 46px; letter-spacing: -0.3px; }
+    .ph-hist-bar { height: 24px; background: #d7f1e9; border-radius: 2px; }
+    .ph-hist-score { font-size: 12px; color: #767678; margin-left: 8px; letter-spacing: -0.46px; }
+
+    /* ── Variant-specific styles ── */
+
+    /* A: 타이틀 전체 링크 */
+    a.title-link { text-decoration: none; display: block; }
+    a.title-link:hover .ph-score-line2 .ph-score-green { text-decoration: underline; text-underline-offset: 2px; }
+
+    /* B: 하단 칩 버튼 */
+    .entry-chip {
+      display: inline-flex; align-items: center; gap: 5px;
+      background: #e8f9f0; color: #09aa5c;
+      font-size: 12px; font-weight: 600; letter-spacing: -0.3px;
+      border-radius: 20px; padding: 6px 14px;
+      margin-top: 10px; cursor: pointer;
+      border: 1px solid rgba(9,170,92,0.2);
+      transition: background 0.15s;
+    }
+    .entry-chip:hover { background: #d3f4e3; }
+
+    /* C: 인라인 밑줄 텍스트 링크 */
+    a.entry-underline {
+      display: inline; font-size: 16px; font-weight: 700;
+      color: #09aa5c; letter-spacing: -0.7px; line-height: 22px;
+      text-decoration: underline; text-underline-offset: 3px;
+      text-decoration-thickness: 1.5px;
+    }
+
+    /* D: 카드 배너 */
+    a.entry-card {
+      display: flex; align-items: center; gap: 10px;
+      background: #f6f8fa; border-radius: 8px;
+      padding: 10px 12px; margin-top: 10px;
+      text-decoration: none; cursor: pointer;
+      border: 1px solid rgba(0,0,0,0.04);
+      transition: background 0.15s;
+    }
+    a.entry-card:hover { background: #eef0f3; }
+    .entry-card-icon {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: #e8f9f0; display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .entry-card-text { flex: 1; }
+    .entry-card-main { font-size: 12px; font-weight: 700; color: #1e1e23; letter-spacing: -0.3px; }
+    .entry-card-sub { font-size: 11px; color: #929294; letter-spacing: -0.2px; margin-top: 1px; }
+    .entry-card-arrow { color: #c5c8cc; font-size: 14px; }
+  </style>
+</head>
+<body>
+
+  <h1>진입 방식 A/B/C/D 쇼케이스</h1>
+  <p class="subtitle">사용자가 "이유 확인하기" 서비스 페이지로 이동함을 인지할 수 있는 UI 컴포넌트 4가지</p>
+
+  <div class="grid">
+
+    <!-- ══ A: 타이틀 전체 클릭 (현재) ══ -->
+    <div class="card">
+      <div class="phone">
+        <div class="ph-statusbar">
+          <span class="time">9:41</span>
+          <div class="icons">
+            <span class="bar-signal" style="height:5px;"></span>
+            <span class="bar-signal" style="height:7px;"></span>
+            <span class="bar-signal" style="height:9px;"></span>
+            <span class="bar-wifi"></span>
+            <span class="bar-batt"><span class="bar-batt-fill"></span></span>
+          </div>
+        </div>
+        <div class="ph-header">
+          <div class="back">
+            <svg width="7" height="12" viewBox="0 0 7 12" fill="none"><path d="M6 1L1 6L6 11" stroke="#222" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            신용점수
+          </div>
+          <span class="ph-title" style="font-size:14px;font-weight:700;color:#222;letter-spacing:-0.36px;">변동·조회</span>
+        </div>
+        <div class="ph-tabs">
+          <div class="ph-tab active">KCB</div>
+          <div class="ph-tab">NICE</div>
+        </div>
+        <div class="ph-subtab">
+          <div class="ph-subtab-item active">최근점수</div>
+          <div class="ph-subtab-item">조회이력</div>
+          <div class="ph-subtab-item">변동내역</div>
+        </div>
+        <div class="ph-score-area">
+          <!-- 타이틀 전체가 링크 -->
+          <a href="service-page.html" class="title-link">
+            <div class="ph-score-line1">오늘 내 신용점수는</div>
+            <div class="ph-score-line2">
+              <span class="ph-score-green">931점</span><span style="color:#1e1e23;">인 이유 확인하기</span>
+              <span style="font-size:14px;color:#09aa5c;font-weight:400;"> ›</span>
+            </div>
+          </a>
+        </div>
+        <div class="ph-today-row">
+          <span class="ph-today-label">오늘</span>
+          <div class="ph-today-bar"></div>
+          <span class="ph-today-score">931</span>
+        </div>
+        <div class="ph-hist">
+          <div class="ph-hist-row">
+            <span class="ph-hist-date">11. 19</span>
+            <div class="ph-hist-bar" style="width:138px;"></div>
+            <span class="ph-hist-score">931</span>
+          </div>
+          <div class="ph-hist-row">
+            <span class="ph-hist-date">11.18</span>
+            <div class="ph-hist-bar" style="width:116px;"></div>
+            <span class="ph-hist-score">855</span>
+          </div>
+          <div class="ph-hist-row">
+            <span class="ph-hist-date">11.17</span>
+            <div class="ph-hist-bar" style="width:116px;"></div>
+            <span class="ph-hist-score">855</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-label">
+        <span class="badge current">현재</span>
+        <span class="card-title">A. 타이틀 전체 클릭</span>
+      </div>
+      <p class="card-desc" style="width:100%;">제목 두 줄 전체가 링크. 터치 영역은 크지만 링크인지 인지하기 어려울 수 있음.</p>
+    </div>
+
+    <!-- ══ B: 하단 칩 버튼 ══ -->
+    <div class="card">
+      <div class="phone">
+        <div class="ph-statusbar">
+          <span class="time">9:41</span>
+          <div class="icons">
+            <span class="bar-signal" style="height:5px;"></span>
+            <span class="bar-signal" style="height:7px;"></span>
+            <span class="bar-signal" style="height:9px;"></span>
+            <span class="bar-wifi"></span>
+            <span class="bar-batt"><span class="bar-batt-fill"></span></span>
+          </div>
+        </div>
+        <div class="ph-header">
+          <div class="back">
+            <svg width="7" height="12" viewBox="0 0 7 12" fill="none"><path d="M6 1L1 6L6 11" stroke="#222" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            신용점수
+          </div>
+          <span style="font-size:14px;font-weight:700;color:#222;letter-spacing:-0.36px;">변동·조회</span>
+        </div>
+        <div class="ph-tabs">
+          <div class="ph-tab active">KCB</div>
+          <div class="ph-tab">NICE</div>
+        </div>
+        <div class="ph-subtab">
+          <div class="ph-subtab-item active">최근점수</div>
+          <div class="ph-subtab-item">조회이력</div>
+          <div class="ph-subtab-item">변동내역</div>
+        </div>
+        <div class="ph-score-area">
+          <div class="ph-score-line1">오늘 내 신용점수는</div>
+          <div class="ph-score-line2">
+            <span class="ph-score-green">931점</span><span style="color:#1e1e23;">이에요</span>
+          </div>
+          <!-- 칩 버튼 -->
+          <a href="service-page.html" class="entry-chip">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#09aa5c" stroke-width="1.8"/><path d="M12 8v4m0 4h.01" stroke="#09aa5c" stroke-width="1.8" stroke-linecap="round"/></svg>
+            이유 확인하기
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M9 6L15 12L9 18" stroke="#09aa5c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+        <div class="ph-today-row" style="margin-top:8px;">
+          <span class="ph-today-label">오늘</span>
+          <div class="ph-today-bar"></div>
+          <span class="ph-today-score">931</span>
+        </div>
+        <div class="ph-hist">
+          <div class="ph-hist-row">
+            <span class="ph-hist-date">11. 19</span>
+            <div class="ph-hist-bar" style="width:138px;"></div>
+            <span class="ph-hist-score">931</span>
+          </div>
+          <div class="ph-hist-row">
+            <span class="ph-hist-date">11.18</span>
+            <div class="ph-hist-bar" style="width:116px;"></div>
+            <span class="ph-hist-score">855</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-label">
+        <span class="badge">B</span>
+        <span class="card-title">B. 하단 칩 버튼</span>
+      </div>
+      <p class="card-desc" style="width:100%;">점수 바로 아래 초록 알약 버튼. 버튼임이 명확하고 터치하기 쉬움. 레이아웃 이동 발생.</p>
+    </div>
+
+    <!-- ══ C: 밑줄 텍스트 링크 ══ -->
+    <div class="card">
+      <div class="phone">
+        <div class="ph-statusbar">
+          <span class="time">9:41</span>
+          <div class="icons">
+            <span class="bar-signal" style="height:5px;"></span>
+            <span class="bar-signal" style="height:7px;"></span>
+            <span class="bar-signal" style="height:9px;"></span>
+            <span class="bar-wifi"></span>
+            <span class="bar-batt"><span class="bar-batt-fill"></span></span>
+          </div>
+        </div>
+        <div class="ph-header">
+          <div class="back">
+            <svg width="7" height="12" viewBox="0 0 7 12" fill="none"><path d="M6 1L1 6L6 11" stroke="#222" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            신용점수
+          </div>
+          <span style="font-size:14px;font-weight:700;color:#222;letter-spacing:-0.36px;">변동·조회</span>
+        </div>
+        <div class="ph-tabs">
+          <div class="ph-tab active">KCB</div>
+          <div class="ph-tab">NICE</div>
+        </div>
+        <div class="ph-subtab">
+          <div class="ph-subtab-item active">최근점수</div>
+          <div class="ph-subtab-item">조회이력</div>
+          <div class="ph-subtab-item">변동내역</div>
+        </div>
+        <div class="ph-score-area">
+          <div class="ph-score-line1">오늘 내 신용점수는</div>
+          <div class="ph-score-line2">
+            <!-- 밑줄 강조 텍스트 링크 -->
+            <a href="service-page.html" class="entry-underline">931점인 이유 확인하기 ›</a>
+          </div>
+        </div>
+        <div class="ph-today-row">
+          <span class="ph-today-label">오늘</span>
+          <div class="ph-today-bar"></div>
+          <span class="ph-today-score">931</span>
+        </div>
+        <div class="ph-hist">
+          <div class="ph-hist-row">
+            <span class="ph-hist-date">11. 19</span>
+            <div class="ph-hist-bar" style="width:138px;"></div>
+            <span class="ph-hist-score">931</span>
+          </div>
+          <div class="ph-hist-row">
+            <span class="ph-hist-date">11.18</span>
+            <div class="ph-hist-bar" style="width:116px;"></div>
+            <span class="ph-hist-score">855</span>
+          </div>
+          <div class="ph-hist-row">
+            <span class="ph-hist-date">11.17</span>
+            <div class="ph-hist-bar" style="width:116px;"></div>
+            <span class="ph-hist-score">855</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-label">
+        <span class="badge">C</span>
+        <span class="card-title">C. 밑줄 텍스트 링크</span>
+      </div>
+      <p class="card-desc" style="width:100%;">두 번째 줄에만 밑줄. 웹에서는 익숙한 링크 패턴. 모바일 앱에선 낯선 패턴일 수 있음.</p>
+    </div>
+
+    <!-- ══ D: 카드 배너 ══ -->
+    <div class="card">
+      <div class="phone">
+        <div class="ph-statusbar">
+          <span class="time">9:41</span>
+          <div class="icons">
+            <span class="bar-signal" style="height:5px;"></span>
+            <span class="bar-signal" style="height:7px;"></span>
+            <span class="bar-signal" style="height:9px;"></span>
+            <span class="bar-wifi"></span>
+            <span class="bar-batt"><span class="bar-batt-fill"></span></span>
+          </div>
+        </div>
+        <div class="ph-header">
+          <div class="back">
+            <svg width="7" height="12" viewBox="0 0 7 12" fill="none"><path d="M6 1L1 6L6 11" stroke="#222" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            신용점수
+          </div>
+          <span style="font-size:14px;font-weight:700;color:#222;letter-spacing:-0.36px;">변동·조회</span>
+        </div>
+        <div class="ph-tabs">
+          <div class="ph-tab active">KCB</div>
+          <div class="ph-tab">NICE</div>
+        </div>
+        <div class="ph-subtab">
+          <div class="ph-subtab-item active">최근점수</div>
+          <div class="ph-subtab-item">조회이력</div>
+          <div class="ph-subtab-item">변동내역</div>
+        </div>
+        <div class="ph-score-area">
+          <div class="ph-score-line1">오늘 내 신용점수는</div>
+          <div class="ph-score-line2">
+            <span class="ph-score-green">931점</span><span style="color:#1e1e23;">이에요</span>
+          </div>
+          <!-- 카드 배너 -->
+          <a href="service-page.html" class="entry-card">
+            <div class="entry-card-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" fill="#09aa5c"/>
+              </svg>
+            </div>
+            <div class="entry-card-text">
+              <div class="entry-card-main">931점인 이유가 궁금하세요?</div>
+              <div class="entry-card-sub">내 점수에 영향 주는 요인 보기</div>
+            </div>
+            <span class="entry-card-arrow">›</span>
+          </a>
+        </div>
+        <div class="ph-today-row" style="margin-top:8px;">
+          <span class="ph-today-label">오늘</span>
+          <div class="ph-today-bar"></div>
+          <span class="ph-today-score">931</span>
+        </div>
+        <div class="ph-hist">
+          <div class="ph-hist-row">
+            <span class="ph-hist-date">11. 19</span>
+            <div class="ph-hist-bar" style="width:138px;"></div>
+            <span class="ph-hist-score">931</span>
+          </div>
+          <div class="ph-hist-row">
+            <span class="ph-hist-date">11.18</span>
+            <div class="ph-hist-bar" style="width:116px;"></div>
+            <span class="ph-hist-score">855</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-label">
+        <span class="badge">D</span>
+        <span class="card-title">D. 카드 배너</span>
+      </div>
+      <p class="card-desc" style="width:100%;">별도 카드 컴포넌트. 제목+설명+화살표 구조로 가장 명확하게 이동 의도를 전달. 공간 차지.</p>
+    </div>
+
+  </div><!-- /grid -->
+
+  <!-- 비교 요약 -->
+  <div style="margin-top:48px;max-width:1280px;margin-left:auto;margin-right:auto;
+              background:#fff;border-radius:12px;border:1px solid #EDEFF2;
+              padding:24px 28px;">
+    <p style="font-size:14px;font-weight:700;color:#1e1e23;letter-spacing:-0.3px;margin-bottom:16px;">비교 요약</p>
+    <table style="width:100%;border-collapse:collapse;font-size:13px;color:#1e1e23;letter-spacing:-0.2px;">
+      <thead>
+        <tr style="border-bottom:1px solid #EDEFF2;">
+          <th style="text-align:left;padding:8px 12px;font-weight:700;color:#929294;width:8%;">안</th>
+          <th style="text-align:left;padding:8px 12px;font-weight:700;color:#929294;width:20%;">방식</th>
+          <th style="text-align:left;padding:8px 12px;font-weight:700;color:#929294;width:20%;">클릭 인지도</th>
+          <th style="text-align:left;padding:8px 12px;font-weight:700;color:#929294;width:20%;">레이아웃 영향</th>
+          <th style="text-align:left;padding:8px 12px;font-weight:700;color:#929294;">비고</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom:1px solid #f6f8fa;">
+          <td style="padding:10px 12px;"><span style="background:#09aa5c;color:#fff;font-size:11px;font-weight:700;padding:2px 7px;border-radius:4px;">현재</span></td>
+          <td style="padding:10px 12px;font-weight:600;">A. 타이틀 전체 클릭</td>
+          <td style="padding:10px 12px;color:#e05a2b;">낮음 — 텍스트처럼 보임</td>
+          <td style="padding:10px 12px;color:#09aa5c;">없음 (가장 깔끔)</td>
+          <td style="padding:10px 12px;color:#767678;">피그마 원본 레이아웃 유지</td>
+        </tr>
+        <tr style="border-bottom:1px solid #f6f8fa;">
+          <td style="padding:10px 12px;font-weight:700;color:#1e1e23;">B</td>
+          <td style="padding:10px 12px;font-weight:600;">하단 칩 버튼</td>
+          <td style="padding:10px 12px;color:#09aa5c;">높음 — 버튼임이 명확</td>
+          <td style="padding:10px 12px;color:#e05a2b;">있음 (약 36px 추가)</td>
+          <td style="padding:10px 12px;color:#767678;">CTA가 둘이 되는 느낌 있음</td>
+        </tr>
+        <tr style="border-bottom:1px solid #f6f8fa;">
+          <td style="padding:10px 12px;font-weight:700;color:#1e1e23;">C</td>
+          <td style="padding:10px 12px;font-weight:600;">밑줄 텍스트 링크</td>
+          <td style="padding:10px 12px;color:#f0a500;">중간 — 웹 사용자에게 친숙</td>
+          <td style="padding:10px 12px;color:#09aa5c;">없음</td>
+          <td style="padding:10px 12px;color:#767678;">모바일 네이티브 패턴과 거리 있음</td>
+        </tr>
+        <tr>
+          <td style="padding:10px 12px;font-weight:700;color:#1e1e23;">D</td>
+          <td style="padding:10px 12px;font-weight:600;">카드 배너</td>
+          <td style="padding:10px 12px;color:#09aa5c;">가장 높음 — 카드형 명확</td>
+          <td style="padding:10px 12px;color:#e05a2b;">있음 (약 54px 추가)</td>
+          <td style="padding:10px 12px;color:#767678;">기존 대출 CTA 카드와 유사 패턴</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</body>
+</html>
