@@ -1,0 +1,457 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>대출 조건 결과 — 케이스 쇼케이스</title>
+  <link rel="stylesheet" as="style" crossorigin
+    href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+  <style>
+    :root {
+      --font: 'Pretendard Variable', Pretendard, -apple-system, system-ui, sans-serif;
+      --green: #09AB49;
+      --npay: #00DE5A;
+      --gray-100: #F6F8FA;
+      --gray-200: #EDEFF2;
+      --gray-700: #767678;
+      --gray-800: #404048;
+      --gray-900: #1E1E23;
+      --orange: #FF8C00;
+      --red: #F03E3E;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font);
+      background: #F0F2F5;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      padding: 52px 40px 72px;
+    }
+
+    /* ─── Page header ─── */
+    .page-title {
+      font-size: 22px; font-weight: 700; color: var(--gray-900);
+      letter-spacing: -.5px; margin-bottom: 6px;
+    }
+    .page-subtitle {
+      font-size: 13px; color: #929294; letter-spacing: -.3px; margin-bottom: 48px;
+    }
+
+    /* ─── Section headers ─── */
+    .section {
+      margin-bottom: 52px;
+    }
+    .section-label {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 12px; font-weight: 700; letter-spacing: .4px; text-transform: uppercase;
+      margin-bottom: 24px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--gray-200);
+      width: 100%;
+    }
+    .section-label .dot {
+      width: 8px; height: 8px; border-radius: 50%;
+    }
+    .section-label.pos .dot { background: var(--green); }
+    .section-label.pos { color: var(--green); border-color: var(--green); }
+    .section-label.neg .dot { background: var(--red); }
+    .section-label.neg { color: var(--red); border-color: var(--red); }
+    .section-label.edge .dot { background: #929294; }
+    .section-label.edge { color: #929294; border-color: var(--gray-200); }
+
+    /* ─── Grid ─── */
+    .grid {
+      display: flex;
+      gap: 28px;
+      flex-wrap: wrap;
+    }
+
+    /* ─── Card (phone + caption) ─── */
+    .card {
+      display: flex; flex-direction: column; gap: 14px;
+      width: 270px;
+    }
+    .card-meta {
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .badge {
+      font-size: 10px; font-weight: 700; letter-spacing: .5px;
+      padding: 3px 8px; border-radius: 4px; text-transform: uppercase;
+    }
+    .badge.pos { background: #EEFFF2; color: var(--green); }
+    .badge.neg { background: #FFF0F0; color: var(--red); }
+    .badge.edge { background: var(--gray-100); color: #929294; }
+    .badge.current { background: var(--gray-900); color: #fff; }
+    .card-title {
+      font-size: 13px; font-weight: 600; color: var(--gray-900); letter-spacing: -.3px;
+    }
+    .card-notes {
+      font-size: 11.5px; color: var(--gray-700); letter-spacing: -.2px; line-height: 1.6;
+      margin-top: 8px;
+    }
+    .card-notes li { list-style: none; padding-left: 12px; position: relative; }
+    .card-notes li::before { content: '·'; position: absolute; left: 2px; color: #c0c0c4; }
+    .card-notes li strong { color: var(--gray-900); font-weight: 600; }
+
+    /* ─── Phone frame ─── */
+    .phone {
+      width: 270px;
+      background: #fff;
+      border-radius: 20px;
+      border: 1px solid var(--gray-200);
+      box-shadow: 0 4px 24px -6px rgba(0,0,0,.12), 0 1px 4px -1px rgba(0,0,0,.07);
+      overflow: hidden;
+    }
+
+    /* ─── Status bar (simplified) ─── */
+    .ph-status {
+      height: 32px; background: #fff;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 16px;
+      font-size: 10px; font-weight: 600; color: #000;
+      font-family: -apple-system, 'SF Pro Text', sans-serif;
+    }
+    .ph-status-right { display: flex; gap: 4px; align-items: center; font-size: 9px; }
+
+    /* ─── Header (X close) ─── */
+    .ph-header {
+      height: 40px;
+      display: flex; align-items: center; justify-content: flex-end;
+      padding: 0 14px;
+    }
+    .ph-close {
+      width: 20px; height: 20px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; color: #000;
+      background: none; border: none; cursor: default;
+    }
+
+    /* ─── Body ─── */
+    .ph-body {
+      padding: 6px 16px 0;
+    }
+
+    /* ─── Title ─── */
+    .ph-title {
+      font-size: 16px; font-weight: 700; line-height: 1.3;
+      letter-spacing: -.03em; color: #000; margin-bottom: 7px;
+    }
+    .ph-title em { font-style: normal; }
+    .ph-title em.green { color: var(--green); }
+    .ph-title em.orange { color: var(--orange); }
+    .ph-subtitle {
+      font-size: 12px; color: var(--gray-700); letter-spacing: -.02em;
+      margin-bottom: 20px;
+    }
+
+    /* ─── Loan items ─── */
+    .ph-items { display: flex; flex-direction: column; }
+    .ph-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 13px 0;
+    }
+    .ph-item + .ph-item { border-top: 1px solid var(--gray-200); }
+    .ph-item img { width: 20px; height: 20px; flex-shrink: 0; }
+    .ph-item-icon-placeholder {
+      width: 20px; height: 20px; flex-shrink: 0;
+      border-radius: 50%; background: var(--gray-200);
+    }
+    .ph-item-label {
+      font-size: 12.5px; font-weight: 400; color: var(--gray-800);
+      letter-spacing: -.02em; flex: 1;
+    }
+    .ph-item-value {
+      font-size: 12.5px; font-weight: 700; letter-spacing: -.02em;
+    }
+    .ph-item-value.green { color: var(--green); }
+    .ph-item-value.red   { color: var(--red); }
+    .ph-item-value.muted { color: #c0c0c4; font-weight: 500; }
+
+    /* ─── CTA button ─── */
+    .ph-btn-area {
+      padding: 16px 0 18px;
+    }
+    .ph-btn {
+      display: block; width: 100%; height: 38px;
+      border-radius: 10px; border: none;
+      font-family: var(--font); font-size: 12.5px; font-weight: 700;
+      letter-spacing: -.02em; cursor: default;
+    }
+    .ph-btn.npay { background: var(--npay); color: #000; }
+    .ph-btn.gray { background: var(--gray-200); color: var(--gray-700); }
+
+    /* ─── Divider (home indicator) ─── */
+    .ph-home {
+      height: 28px; background: #fff;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .ph-home-bar {
+      width: 80px; height: 4px; background: #000; border-radius: 3px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1 class="page-title">대출 조건 결과 — 케이스 쇼케이스</h1>
+  <p class="page-subtitle">신용점수 구간별 문구·값·CTA 표기 기준 정의용</p>
+
+  <!-- ──────────────── 긍정 케이스 ──────────────── -->
+  <div class="section">
+    <div class="section-label pos">
+      <span class="dot"></span>긍정 케이스 — 좋은 신용점수, 유리한 대출 조건
+    </div>
+    <div class="grid">
+
+      <!-- A: 최고 (950점+) -->
+      <div class="card">
+        <div class="card-meta">
+          <span class="badge pos">긍정 A</span>
+          <span class="card-title">최고 신용 · 950점 이상</span>
+        </div>
+        <div class="phone">
+          <div class="ph-status">9:41 <span class="ph-status-right">▲▲▲ ☁ 🔋</span></div>
+          <div class="ph-header"><button class="ph-close">✕</button></div>
+          <div class="ph-body">
+            <div class="ph-title"><em class="green">내 신용점수</em> 맞춤형<br>대출 조건이에요</div>
+            <div class="ph-subtitle">950점 이상 통계 기준이에요</div>
+            <div class="ph-items">
+              <div class="ph-item">
+                <img src="https://www.figma.com/api/mcp/asset/12d3a690-6e05-496c-b69c-cdfae76df3b6" width="20" height="20" alt="">
+                <span class="ph-item-label">최저 금리</span>
+                <span class="ph-item-value green">연 2.50%</span>
+              </div>
+              <div class="ph-item">
+                <img src="https://www.figma.com/api/mcp/asset/510e3f8a-0a75-4996-91bd-659845dda2a7" width="20" height="20" alt="">
+                <span class="ph-item-label">최대 한도</span>
+                <span class="ph-item-value">2억 원</span>
+              </div>
+            </div>
+            <div class="ph-btn-area">
+              <button class="ph-btn npay">정확한 대출 조건 확인하기</button>
+            </div>
+          </div>
+          <div class="ph-home"><div class="ph-home-bar"></div></div>
+        </div>
+        <ul class="card-notes">
+          <li><strong>타이틀 강조</strong>: "내 신용점수" 그린 유지</li>
+          <li><strong>서브</strong>: 구간 그대로 노출 ("950점 이상")</li>
+          <li><strong>금리값</strong>: 그린 강조</li>
+          <li><strong>CTA</strong>: 동일 ("정확한 대출 조건 확인하기")</li>
+        </ul>
+      </div>
+
+      <!-- B: 우수 (900점대) ← 현재 프로토타입 기준 -->
+      <div class="card">
+        <div class="card-meta">
+          <span class="badge current">긍정 B · 현재</span>
+          <span class="card-title">우수 신용 · 900점대</span>
+        </div>
+        <div class="phone">
+          <div class="ph-status">9:41 <span class="ph-status-right">▲▲▲ ☁ 🔋</span></div>
+          <div class="ph-header"><button class="ph-close">✕</button></div>
+          <div class="ph-body">
+            <div class="ph-title"><em class="green">내 신용점수</em> 맞춤형<br>대출 조건이에요</div>
+            <div class="ph-subtitle">900점 대 통계 기준이에요</div>
+            <div class="ph-items">
+              <div class="ph-item">
+                <img src="https://www.figma.com/api/mcp/asset/12d3a690-6e05-496c-b69c-cdfae76df3b6" width="20" height="20" alt="">
+                <span class="ph-item-label">최저 금리</span>
+                <span class="ph-item-value green">연 3.95%</span>
+              </div>
+              <div class="ph-item">
+                <img src="https://www.figma.com/api/mcp/asset/510e3f8a-0a75-4996-91bd-659845dda2a7" width="20" height="20" alt="">
+                <span class="ph-item-label">최대 한도</span>
+                <span class="ph-item-value">1.25억 원</span>
+              </div>
+            </div>
+            <div class="ph-btn-area">
+              <button class="ph-btn npay">정확한 대출 조건 확인하기</button>
+            </div>
+          </div>
+          <div class="ph-home"><div class="ph-home-bar"></div></div>
+        </div>
+        <ul class="card-notes">
+          <li><strong>타이틀 강조</strong>: "내 신용점수" 그린 유지</li>
+          <li><strong>서브</strong>: "900점 대 통계 기준이에요"</li>
+          <li><strong>금리값</strong>: 그린 강조</li>
+          <li><strong>CTA</strong>: 동일 ("정확한 대출 조건 확인하기")</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ──────────────── 부정 케이스 ──────────────── -->
+  <div class="section">
+    <div class="section-label neg">
+      <span class="dot"></span>부정 케이스 — 낮은 신용점수, 불리한 대출 조건
+    </div>
+    <div class="grid">
+
+      <!-- C: 보통 (700-800점대) -->
+      <div class="card">
+        <div class="card-meta">
+          <span class="badge neg">부정 C</span>
+          <span class="card-title">보통 신용 · 700-800점대</span>
+        </div>
+        <div class="phone">
+          <div class="ph-status">9:41 <span class="ph-status-right">▲▲▲ ☁ 🔋</span></div>
+          <div class="ph-header"><button class="ph-close">✕</button></div>
+          <div class="ph-body">
+            <div class="ph-title"><em class="green">내 신용점수</em> 맞춤형<br>대출 조건이에요</div>
+            <div class="ph-subtitle">700점 대 통계 기준이에요</div>
+            <div class="ph-items">
+              <div class="ph-item">
+                <img src="https://www.figma.com/api/mcp/asset/12d3a690-6e05-496c-b69c-cdfae76df3b6" width="20" height="20" alt="">
+                <span class="ph-item-label">최저 금리</span>
+                <span class="ph-item-value red">연 8.50%</span>
+              </div>
+              <div class="ph-item">
+                <img src="https://www.figma.com/api/mcp/asset/510e3f8a-0a75-4996-91bd-659845dda2a7" width="20" height="20" alt="">
+                <span class="ph-item-label">최대 한도</span>
+                <span class="ph-item-value">2,500만 원</span>
+              </div>
+            </div>
+            <div class="ph-btn-area">
+              <button class="ph-btn npay">정확한 대출 조건 확인하기</button>
+            </div>
+          </div>
+          <div class="ph-home"><div class="ph-home-bar"></div></div>
+        </div>
+        <ul class="card-notes">
+          <li><strong>타이틀</strong>: 동일 유지 vs "지금도 대출받을 수 있어요" 검토</li>
+          <li><strong>서브</strong>: "700점 대 통계 기준이에요"</li>
+          <li><strong>금리값</strong>: 레드 강조 (불리한 조건 인지)</li>
+          <li><strong>CTA</strong>: 동일 or "대출 가능 여부 확인하기"</li>
+        </ul>
+      </div>
+
+      <!-- D: 낮음 (600점 이하) -->
+      <div class="card">
+        <div class="card-meta">
+          <span class="badge neg">부정 D</span>
+          <span class="card-title">낮은 신용 · 600점 이하</span>
+        </div>
+        <div class="phone">
+          <div class="ph-status">9:41 <span class="ph-status-right">▲▲▲ ☁ 🔋</span></div>
+          <div class="ph-header"><button class="ph-close">✕</button></div>
+          <div class="ph-body">
+            <div class="ph-title">신용점수를 올리면<br><em class="green">더 좋은 조건</em>이 가능해요</div>
+            <div class="ph-subtitle">600점 대 통계 기준이에요</div>
+            <div class="ph-items">
+              <div class="ph-item">
+                <img src="https://www.figma.com/api/mcp/asset/12d3a690-6e05-496c-b69c-cdfae76df3b6" width="20" height="20" alt="">
+                <span class="ph-item-label">최저 금리</span>
+                <span class="ph-item-value red">연 15.00%</span>
+              </div>
+              <div class="ph-item">
+                <img src="https://www.figma.com/api/mcp/asset/510e3f8a-0a75-4996-91bd-659845dda2a7" width="20" height="20" alt="">
+                <span class="ph-item-label">최대 한도</span>
+                <span class="ph-item-value">500만 원</span>
+              </div>
+            </div>
+            <div class="ph-btn-area">
+              <button class="ph-btn npay">신용점수 올리는 방법 보기</button>
+            </div>
+          </div>
+          <div class="ph-home"><div class="ph-home-bar"></div></div>
+        </div>
+        <ul class="card-notes">
+          <li><strong>타이틀</strong>: 개선 유도 문구로 전환 검토</li>
+          <li><strong>서브</strong>: "600점 대 통계 기준이에요"</li>
+          <li><strong>금리값</strong>: 레드 강조</li>
+          <li><strong>CTA</strong>: "신용점수 올리는 방법 보기"로 변경 검토</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ──────────────── 특수 케이스 ──────────────── -->
+  <div class="section">
+    <div class="section-label edge">
+      <span class="dot"></span>특수 케이스 — 데이터 없음 / 조회 불가
+    </div>
+    <div class="grid">
+
+      <!-- E: 조회 불가 -->
+      <div class="card">
+        <div class="card-meta">
+          <span class="badge edge">특수 E</span>
+          <span class="card-title">대출 조건 조회 불가</span>
+        </div>
+        <div class="phone">
+          <div class="ph-status">9:41 <span class="ph-status-right">▲▲▲ ☁ 🔋</span></div>
+          <div class="ph-header"><button class="ph-close">✕</button></div>
+          <div class="ph-body">
+            <div class="ph-title">대출 조건을<br>확인할 수 없어요</div>
+            <div class="ph-subtitle">신용점수 이력이 부족해요</div>
+            <div class="ph-items">
+              <div class="ph-item">
+                <div class="ph-item-icon-placeholder"></div>
+                <span class="ph-item-label">최저 금리</span>
+                <span class="ph-item-value muted">— </span>
+              </div>
+              <div class="ph-item">
+                <div class="ph-item-icon-placeholder"></div>
+                <span class="ph-item-label">최대 한도</span>
+                <span class="ph-item-value muted">— </span>
+              </div>
+            </div>
+            <div class="ph-btn-area">
+              <button class="ph-btn gray">신용점수 확인하기</button>
+            </div>
+          </div>
+          <div class="ph-home"><div class="ph-home-bar"></div></div>
+        </div>
+        <ul class="card-notes">
+          <li><strong>타이틀</strong>: 결과 없음 명시 (그린 없음)</li>
+          <li><strong>서브</strong>: 이유 간략히 ("신용점수 이력이 부족해요")</li>
+          <li><strong>값</strong>: "—" 처리 + 아이콘 비활성화</li>
+          <li><strong>CTA</strong>: "신용점수 확인하기"로 대체 + 버튼 비활성 스타일</li>
+        </ul>
+      </div>
+
+      <!-- F: 일시적 오류 -->
+      <div class="card">
+        <div class="card-meta">
+          <span class="badge edge">특수 F</span>
+          <span class="card-title">일시적 서비스 오류</span>
+        </div>
+        <div class="phone">
+          <div class="ph-status">9:41 <span class="ph-status-right">▲▲▲ ☁ 🔋</span></div>
+          <div class="ph-header"><button class="ph-close">✕</button></div>
+          <div class="ph-body">
+            <div class="ph-title">잠깐, 데이터를<br>불러오지 못했어요</div>
+            <div class="ph-subtitle">잠시 후 다시 시도해 주세요</div>
+            <div class="ph-items">
+              <div class="ph-item">
+                <div class="ph-item-icon-placeholder"></div>
+                <span class="ph-item-label">최저 금리</span>
+                <span class="ph-item-value muted">— </span>
+              </div>
+              <div class="ph-item">
+                <div class="ph-item-icon-placeholder"></div>
+                <span class="ph-item-label">최대 한도</span>
+                <span class="ph-item-value muted">— </span>
+              </div>
+            </div>
+            <div class="ph-btn-area">
+              <button class="ph-btn npay">다시 시도하기</button>
+            </div>
+          </div>
+          <div class="ph-home"><div class="ph-home-bar"></div></div>
+        </div>
+        <ul class="card-notes">
+          <li><strong>타이틀</strong>: 에러 상황 명시 (공감 어조)</li>
+          <li><strong>서브</strong>: 행동 안내 ("잠시 후 다시 시도")</li>
+          <li><strong>값</strong>: "—" 처리 동일</li>
+          <li><strong>CTA</strong>: "다시 시도하기" (npay 그린 유지)</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>
