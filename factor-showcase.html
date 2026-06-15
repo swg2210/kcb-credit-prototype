@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>신용영향 요인 카드 — 42케이스 쇼케이스</title>
+  <link rel="stylesheet" as="style" crossorigin
+    href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+  <style>
+    :root {
+      --font: 'Pretendard Variable', Pretendard, -apple-system, system-ui, sans-serif;
+      --green-500: #09AB49; --green-100: #EEFFF2;
+      --gray-100: #F6F8FA; --gray-200: #EDEFF2;
+      --gray-700: #767678; --gray-800: #404048; --gray-900: #1E1E23;
+      --neg: #E05A2B; --neg-bg: #FFF3EE;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: var(--font); background: #F0F2F5; color: var(--gray-900); -webkit-font-smoothing: antialiased; padding: 48px 32px 80px; }
+    .page-header { max-width: 1080px; margin: 0 auto 40px; }
+    .page-title { font-size: 22px; font-weight: 700; letter-spacing: -.5px; margin-bottom: 6px; }
+    .page-subtitle { font-size: 14px; color: var(--gray-700); }
+    .section { max-width: 1080px; margin: 0 auto 48px; }
+    .section-header { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 2px solid var(--gray-900); }
+    .section-title { font-size: 17px; font-weight: 700; letter-spacing: -.4px; }
+    .section-count { font-size: 12px; font-weight: 600; color: var(--gray-700); background: var(--gray-200); padding: 2px 8px; border-radius: 999px; }
+    .badge-neg { font-size: 11px; font-weight: 700; padding: 2px 7px; border-radius: 4px; background: var(--neg-bg); color: var(--neg); }
+    .badge-pos { font-size: 11px; font-weight: 700; padding: 2px 7px; border-radius: 4px; background: var(--green-100); color: var(--green-500); }
+    .subsection { margin-bottom: 28px; }
+    .sub-label { font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 10px; }
+    .sub-label.p0 { color: #C62828; }
+    .sub-label.p1 { color: var(--neg); }
+    .sub-label.p2 { color: #D97706; }
+    .sub-label.p3 { color: var(--gray-800); }
+    .sub-label.s3 { color: var(--green-500); }
+    .sub-label.s2 { color: #059669; }
+    .sub-label.s1 { color: var(--gray-700); }
+    .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; align-items: start; }
+    @media (min-width: 1100px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 640px) { .grid { grid-template-columns: 1fr; } }
+    .card { background: #fff; border-radius: 14px; border: 1px solid var(--gray-200); padding: 14px 16px; display: flex; align-items: flex-start; gap: 12px; }
+    .icon { width: 40px; height: 40px; border-radius: 12px; flex-shrink: 0; overflow: hidden; margin-top: 1px; }
+    .icon img { display: block; width: 40px; height: 40px; }
+    .content { flex: 1; min-width: 0; }
+    .row1 { display: flex; align-items: center; gap: 5px; flex-wrap: wrap; margin-bottom: 3px; }
+    .title { font-size: 15px; font-weight: 600; color: var(--gray-900); letter-spacing: -.02em; line-height: 1.4; }
+    .badge { display: inline-flex; align-items: center; font-size: 11px; font-weight: 700; padding: 2px 6px; border-radius: 4px; white-space: nowrap; flex-shrink: 0; line-height: 1.5; }
+    .badge.neg { background: var(--neg-bg); color: var(--neg); }
+    .badge.pos { background: var(--green-100); color: var(--green-500); }
+    .sub { font-size: 14px; color: var(--gray-700); letter-spacing: -.02em; line-height: 1.4; }
+    .sub b { color: var(--gray-800); font-weight: 600; }
+    .ms { margin-top: 6px; padding: 7px 10px; background: var(--gray-100); border-radius: 8px; font-size: 12px; color: var(--gray-700); letter-spacing: -.01em; line-height: 1.4; }
+
+  </style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1 class="page-title">신용영향 요인 카드 — 42케이스 쇼케이스</h1>
+  <p class="page-subtitle">부정 24개 (P0→P3) · 긍정 18개 (★★★→★) · factor-cases.md 기반</p>
+</div>
+
+<!-- ═══ 부정 요인 ═══ -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-title">부정 요인</span>
+    <span class="section-count">24개</span>
+    <span class="badge-neg">부정</span>
+  </div>
+
+  <div class="subsection">
+    <div class="sub-label p0">P0 — 신용 위기 (즉각 조치 필요)</div>
+    <div class="grid">
+      <div class="card">
+        <div class="icon"><img src="icons/icon_01.png" alt=""></div>
+        <div class="content">
+          <div class="row1"><span class="title">현재 연체가 진행 중이에요</span><span class="badge neg">부정</span></div>
+          <div class="sub">현재 <b>N일 이상</b> 연체 중이에요</div>
+          <div class="ms">연체 이력이 없어지면 긍정 요인이 될 수 있어요</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="icon"><img src="icons/icon_01.png" alt=""></div>
+        <div class="content">
+          <div class="row1"><span class="title">장기 연체가 진행 중이에요</span><span class="badge neg">부정</span></div>
+          <div class="sub"><b>90일 이상</b> 연체 또는 공공정보 보유</div>
+          <div class="ms">연체를 해결하면 긍정 요인이 될 수 있어요</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="icon"><img src="icons/icon_06.png" alt=""></div>
+        <div class="content">
+          <div class="row1"><span class="title">신용도 판단 정보가 있어요</span><span class="badge neg">부정</span></div>
+          <div class="sub">현재 개인회생·파산면책 등 보유</div>
+          <div class="ms">공공정보가 해소되면 긍정 요인이 될 수 있어요</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="icon"><img src="icons/icon_03.png" alt=""></div>
+        <div class="content">
+          <div class="row1"><span class="title">최근 여러 곳에서 대출을 개설했어요</span><span class="badge neg">부정</span></div>
+          <div class="sub">최근 6개월 내 <b>N기관 이상</b> 개설</div>
+          <div class="ms">신규 대출 없이 유지하면 긍정 요인이 될 수 있어요</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="icon"><img src="icons/icon_09.png" alt=""></div>
+        <div class="content">
+          <div class="row1"><span class="title">고금리 대출을 여러 곳에 보유 중이에요</span><span class="badge neg">부정</span></div>
+          <div class="sub">비은행 중금리 이상 <b>N기관</b> 보유</div>
+          <div class="ms">상환을 꾸준히 이어가면 긍정 요인이 될 수 있어요</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="icon"><img src="icons/icon_03.png" alt=""></div>
+        <div class="content">
+          <div class="row1"><span class="title">저축은행·대부업 대출이 여러 곳에 있어요</span><span class="badge neg">부정</span></div>
+          <div class="sub">저축은행/대부업권 다기관 보유</div>
+          <div class="ms">저축은행·대부업 대출 없이 유지하면 긍정 요인이 될 수 있어요</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="subsection">
+    <div class="sub-label p1">P1 — 위험 (주의 관리 필요)</div>
+    <div class="grid">
+      <div class="card">
+        <div class="icon"><img src="icons/icon_01.png" alt=""></div>
+        <div class="content">
+          <div class="row1"><span class="title">과거 연체 경험이 있어요</span><span class="badge neg">부정</span></div>
+          <div class="sub">전국민 <b>--%</b> 해당돼요</div>
+          <div class="ms">연체 없이 유지하면 긍정 요인이 될 수 있어요</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="icon"><img src="icons/icon_01.png" alt=""></div>
+        <div class="content">
+          <div class="row1"><span class="title">최근 연체 경험이 있어요</span><span class="badge neg">부정</span></div>
+          <div class="sub">최근 <b>N년 내</b> 연체 이력</div>
+          <div class="ms">연체 없이 유지하면 긍정 요인이 될 수 있어요</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="icon"><img src="icons/icon_01.png" alt=""></div>
+        <div class="content">
+          <div class="row1"><span class="title">장기 연체 경험이 있어요</span><span class="badge neg">부정</span></div>
+          <div class="sub">전국민 <b>--%</b> 해당돼요</div>
+          <div class="ms">연체 없이 유지하면 긍정 요인이 될 수 있어요</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="icon"><img src="icons/icon_06.png" alt=""></div>
+        <div class="content">
+          <div class="row1"><span class="title">신용도 판단 경험이 있어요</span><span class="badge neg">부정</span></div>
+          <div class="sub">전국민 <b>--%</b> 해당돼요</div>
+          <div class="ms">기간이 지나면 긍정 요인이 될 수 있어요</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="icon"><img src="icons/icon_05.png" alt=""></div>
+        <div class="content">
+          <div class="row1"><span class="title">채무 조정 경험이 있어요</span><span class="badge neg">부정</span></div>
+          <div class="sub">전국민 <b>--%</b> 해당돼요</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="icon"><img src="icons/icon_05.png" alt=""></div>
+        <div class="content">
+          <div class="row1"><span class="title">세금 체납 경험이 있어요</span><span class="badge neg">부정</span></div>
+          <div class="sub">전국민 <b>--%</b> 해당돼요</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="icon"><img src="icons/icon_09.png" alt=""></div>
+        <div class="content">
+          <div class="row1"><span class="title">부채 수준이 평균보다 높아요</span><span class="badge neg">부정</span></div>
+          <div class="sub">전국민 <b>--%</b> 해당돼요</div>
+          <div class="ms">부채 수준을 낮추면 긍정 요인이 될 수 있어요</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="icon"><img src="icons/icon_09.png" alt=""></div>
+        <div class="content">
+          <div class="row1"><span class="title">비은행 중금리 대출을 보유 중이에요</span><span class="badge neg">부정</span></div>
+          <div class="sub">비은행업권 중금리 이상 <b>N기관</b> 보유</div>
+          <div class="ms">상환을 꾸준히 이어가면 긍정 요인이 될 수 있어요</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="icon"><img src="icons/icon_04.png" alt=""></div>
+        <div class="content">
+          <div class="row1"><span class="title">한도 대출이 거의 소진됐어요</span><span class="badge neg">부정</span></div>
+          <div class="sub">전국민 <b>--%</b> 해당돼요</div>
+          <div class="ms">한도를 일부 유지하면 긍정 요인이 될 수 있어요</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="icon"><img src="icons/icon_07.png" alt=""></div>
+        <div class="content">
+          <div class="row1"><span class="title">현재 현금서비스를 이용 중이에요</span><span class="badge neg">부정</span></div>
+          <div class="sub">전국민 <b>--%</b> 해당돼요</div>
+          <div class="ms">현금서비스를 끊으면 긍정 요인이 될 수 있어요</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="icon"><img src="icons/icon_04.png" alt=""></div>
+        <div class="content">
+          <div class="row1"><span class="title">최근 신용카드 사용이 많아요</span><span class="badge neg">부정</span></div>
+          <div class="sub">전국민 <b>--%</b> 해당돼요</div>
+          <div class="ms">카드 사용 수준이 적정해지면 긍정 요인이 될 수 있어요</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="subsection">
+    <div class="sub-label p2">P2 — 주의 (개선 권장)</div>
+    <div class="grid">
+      <div class="card">
+        <div class="icon"><img src="icons/icon_03.png" alt=""></div>
+        <div class="content">
+          <div class="row1"><span class="title">최근 대출을 새로 개설했어요</span><span class="badge neg">부정</span></div>
+          <div class="sub">최근 6개월 내 대출 개설</div>
+          <div class="ms">신규 대출 없이 유지하면 긍정 요인이 될 수 있어요</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="icon"><img src="icons/icon_04.png" alt=""></div>
+        <div class="content">
+          <div class="row1"><span class="title">한도 대출 사용이 다소 많아요</span><span class="badge neg">부정</span></div>
+          <div class="sub">전국민 <b>--%</b> 해당돼요</div>
+          <div class="ms">한도 잔여액을 늘리면 긍정 요인이 될 수 있어요</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="icon"><img src="icons/icon_03.png" alt=""></div>
+        <div class="content">
+          <div class="row1"><span class="title">대출을 보유 중이에요</span><span class="badge neg">부정</span></div>
+          <div class="sub">전국민 <b>--%</b> 해당돼요</div>
+          <div class="ms">대출을 모두 상환하면 긍정 요인이 될 수 있어요</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="icon"><img src="icons/icon_07.png" alt=""></div>
+        <div class="content">
+          <div class="row1"><span class="title">과거 현금서비스 이용 경험이 있어요</span><span class="badge neg">부정</span></div>
+          <div class="sub">전국민 <b>--%</b> 해당돼요</div>
+          <div class="ms">현금서비스 없이 유지하면 긍정 요인이 될 수 있어요</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="icon"><img src="icons/icon_09.png" alt=""></div>
+        <div class="content">
+          <div class="row1"><span class="title">과거 고금리 대출 경험이 있어요</span><span class="badge neg">부정</span></div>
+          <div class="sub">전국민 <b>--%</b> 해당돼요</div>
+          <div class="ms">고금리 대출 없이 유지하면 긍정 요인이 될 수 있어요</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="subsection">
+    <div class="sub-label p3">P3 — 신용 형성 부족</div>
+    <div class="grid">
+      <div class="card">
+        <div class="icon"><img src="icons/icon_08.png" alt=""></div>
+        <div class="content">
+          <div class="row1"><span class="title">신용카드 보유기간이 짧아요</span><span class="badge neg">부정</span></div>
+          <div class="sub">전국민 <b>--%</b> 해당돼요</div>
+          <div class="ms">카드를 꾸준히 사용하면 긍정 요인이 될 수 있어요</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="icon"><img src="icons/icon_08.png" alt=""></div>
+        <div class="content">
+          <div class="row1"><span class="title">신용거래 이력이 부족해요</span><span class="badge neg">부정</span></div>
+          <div class="sub">전국민 <b>--%</b> 해당돼요</div>
+          <div class="ms">신용 거래를 시작하면 긍정 요인이 될 수 있어요</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 긍정 요인 ═══ -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-title">긍정 요인</span>
+    <span class="section-count">18개</span>
+    <span class="badge-pos">긍정</span>
+  </div>
+
+  <div class="subsection">
+    <div class="sub-label s3">★★★ — 핵심 강점</div>
+    <div class="grid">
+      <div class="card">
+        <div class="icon"><img src="icons/icon_02.png" alt=""></div>
+        <div class="content">
+          <div class="row1"><span class="title">연체한 경험이 없어요</span><span class="badge pos">긍정</span></div>
+          <div class="sub">전국민 <b>18%</b>만 해당돼요</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="icon"><img src="icons/icon_08.png" alt=""></div>
+        <div class="content">
+          <div class="row1"><span class="title">신용거래 기간이 길어요</span><span class="badge pos">긍정</span></div>
+          <div class="sub">장기간 신용카드 보유 이력</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="icon"><img src="icons/icon_03.png" alt=""></div>
+        <div class="content">
+          <div class="row1"><span class="title">현재 대출이 없어요</span><span class="badge pos">긍정</span></div>
+          <div class="sub">깨끗한 부채 상태예요</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="subsection">
+    <div class="sub-label s2">★★ — 보조 강점</div>
+    <div class="grid">
+      <div class="card">
+        <div class="icon"><img src="icons/icon_05.png" alt=""></div>
+        <div class="content">
+          <div class="row1"><span class="title">연체 해결 후 회복 중이에요</span><span class="badge pos">긍정</span></div>
+          <div class="sub">연체·공공정보 해제 후 <b>N개월</b> 경과</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="icon"><img src="icons/icon_05.png" alt=""></div>
+        <div class="content">
+          <div class="row1"><span class="title">채무 조정 이력이 없어요</span><span class="badge pos">긍정</span></div>
+          <div class="sub">전국민 <b>--%</b> 해당돼요</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="icon"><img src="icons/icon_09.png" alt=""></div>
+        <div class="content">
+          <div class="row1"><span class="title">대출이 있지만 부채 수준이 적정해요</span><span class="badge pos">긍정</span></div>
+          <div class="sub">대출 보유 중, 부채수준 <b>양호</b></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="icon"><img src="icons/icon_06.png" alt=""></div>
+        <div class="content">
+          <div class="row1"><span class="title">신용도 판단 이력이 없어요</span><span class="badge pos">긍정</span></div>
+          <div class="sub">전국민 <b>--%</b> 해당돼요</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="icon"><img src="icons/icon_07.png" alt=""></div>
+        <div class="content">
+          <div class="row1"><span class="title">현금서비스 이용이 없어요</span><span class="badge pos">긍정</span></div>
+          <div class="sub">전국민 <b>--%</b> 해당돼요</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="icon"><img src="icons/icon_03.png" alt=""></div>
+        <div class="content">
+          <div class="row1"><span class="title">최근 신규 대출이 없어요</span><span class="badge pos">긍정</span></div>
+          <div class="sub">최근 <b>6개월 이상</b> 신규 대출 없음</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="icon"><img src="icons/icon_09.png" alt=""></div>
+        <div class="content">
+          <div class="row1"><span class="title">최근 고금리 대출 경험이 없어요</span><span class="badge pos">긍정</span></div>
+          <div class="sub">최근 <b>2년 내</b> 고금리 대출 없음</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="icon"><img src="icons/icon_05.png" alt=""></div>
+        <div class="content">
+          <div class="row1"><span class="title">채무 조정 상환을 꾸준히 진행 중이에요</span><span class="badge pos">긍정</span></div>
+          <div class="sub">전국민 <b>--%</b> 해당돼요</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="icon"><img src="icons/icon_03.png" alt=""></div>
+        <div class="content">
+          <div class="row1"><span class="title">우량 대출만 보유 중이에요</span><span class="badge pos">긍정</span></div>
+          <div class="sub">현재 우량대출(주담대·전세 등) 보유</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="icon"><img src="icons/icon_09.png" alt=""></div>
+        <div class="content">
+          <div class="row1"><span class="title">중금리 대출이지만 상환을 잘 하고 있어요</span><span class="badge pos">긍정</span></div>
+          <div class="sub">비은행 중금리 대출 보유, 상환율 <b>양호</b></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="icon"><img src="icons/icon_04.png" alt=""></div>
+        <div class="content">
+          <div class="row1"><span class="title">체크카드를 꾸준히 사용 중이에요</span><span class="badge pos">긍정</span></div>
+          <div class="sub">전국민 <b>--%</b> 해당돼요</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="icon"><img src="icons/icon_04.png" alt=""></div>
+        <div class="content">
+          <div class="row1"><span class="title">신용카드 사용 수준이 적정해요</span><span class="badge pos">긍정</span></div>
+          <div class="sub">전국민 <b>--%</b> 해당돼요</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="icon"><img src="icons/icon_10.png" alt=""></div>
+        <div class="content">
+          <div class="row1"><span class="title">성실납부 가점이 적용됐어요</span><span class="badge pos">긍정</span></div>
+          <div class="sub">비금융 성실납부 또는 학자금 성실상환</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="subsection">
+    <div class="sub-label s1">★ — 약한 긍정</div>
+    <div class="grid">
+      <div class="card">
+        <div class="icon"><img src="icons/icon_04.png" alt=""></div>
+        <div class="content">
+          <div class="row1"><span class="title">체크카드를 오래 보유했어요</span><span class="badge pos">긍정</span></div>
+          <div class="sub">전국민 <b>--%</b> 해당돼요</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="icon"><img src="icons/icon_04.png" alt=""></div>
+        <div class="content">
+          <div class="row1"><span class="title">한도 대출 사용이 적정해요</span><span class="badge pos">긍정</span></div>
+          <div class="sub">전국민 <b>--%</b> 해당돼요</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
