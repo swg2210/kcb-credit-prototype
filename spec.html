@@ -1,0 +1,576 @@
+﻿<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>KCB 내 점수 분석 — 기획서</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" />
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+<style>
+:root {
+  --bg:#fff; --bg-soft:#f7f8fa; --bg-mute:#eef0f3;
+  --line:#e5e8ec; --line-strong:#cdd2d9;
+  --text:#191f28; --text-sub:#4e5968; --text-dim:#8b95a1;
+  --primary:#09AB49; --primary-soft:#e8f7ee; --primary-deep:#067a36;
+  --warn:#f04452; --warn-soft:rgba(240,68,82,.08);
+  --amber:#f9c23c; --amber-soft:rgba(249,194,60,.12);
+  --blue:#3b82f6; --blue-soft:rgba(59,130,246,.1);
+  --radius:14px;
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--text)}
+body{font-family:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,system-ui,sans-serif;font-feature-settings:"ss01","ss03","tnum";letter-spacing:-.018em;line-height:1.65;font-size:16px;-webkit-font-smoothing:antialiased}
+.wrap{max-width:900px;margin:0 auto;padding:64px 28px 120px}
+h1,h2,h3,h4{letter-spacing:-.025em;margin:0}
+h1{font-size:38px;font-weight:800;line-height:1.2}
+h2{font-size:26px;font-weight:800;margin:72px 0 16px}
+h3{font-size:19px;font-weight:700;margin:36px 0 12px}
+h4{font-size:15.5px;font-weight:700;margin:14px 0 6px}
+p{margin:10px 0}
+ul,ol{padding-left:20px;margin:8px 0}
+li{margin:4px 0}
+hr{border:0;border-top:1px solid var(--line);margin:56px 0}
+a{color:var(--primary-deep);text-decoration:none;border-bottom:1px solid rgba(6,122,54,.25)}
+a:hover{border-bottom-color:var(--primary-deep)}
+code{font-family:"SF Mono",Menlo,"Cascadia Code",monospace;font-size:12.5px;background:var(--bg-mute);padding:1px 5px;border-radius:4px}
+
+/* 섹션 번호 */
+.section-no{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--primary-deep);margin-bottom:6px}
+.section-no::before{content:"";display:block;width:18px;height:2px;background:var(--primary);border-radius:1px}
+.section-opt{font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;background:var(--bg-mute);color:var(--text-dim);letter-spacing:.04em;text-transform:uppercase;margin-left:6px;vertical-align:middle}
+
+/* 리소스 바 */
+.resource-bar{display:flex;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;margin-bottom:40px}
+.res-link{flex:1;display:flex;align-items:center;gap:10px;padding:12px 18px;text-decoration:none;border-bottom:none;font-size:13px;transition:background .12s}
+.res-link+.res-link{border-left:1px solid var(--line)}
+.res-link.md{background:var(--bg-soft)}.res-link.md:hover{background:var(--bg-mute)}
+.res-link.sub{background:#f0f4ff}.res-link.sub:hover{background:#e0eaff}
+.res-icon{font-size:15px;flex-shrink:0}
+.res-title{font-weight:700;color:var(--text);flex:1}
+.res-action{font-size:11px;font-weight:600;color:var(--text-dim);flex-shrink:0}
+.res-link.sub .res-action{color:#3b4daa}
+
+/* Hero */
+.hero{padding:40px 0 24px}
+.eyebrow{display:inline-block;font-size:12px;font-weight:700;color:var(--primary-deep);background:var(--primary-soft);padding:5px 12px;border-radius:999px;letter-spacing:.02em}
+.hero h1{margin-top:16px}
+.hero .lead{font-size:18px;color:var(--text-sub);margin-top:14px;max-width:680px;line-height:1.6}
+.hero-meta{margin-top:22px;font-size:13px;color:var(--text-dim);display:flex;gap:20px;flex-wrap:wrap}
+.hero-meta strong{color:var(--text-sub);font-weight:600}
+.summary{background:var(--bg-soft);border-radius:18px;padding:24px 28px;margin:28px 0 0}
+.summary .row{display:grid;grid-template-columns:130px 1fr;gap:12px;padding:10px 0;border-top:1px solid var(--line)}
+.summary .row:first-child{border-top:0}
+.summary .k{color:var(--text-dim);font-size:14px;font-weight:600}
+.summary .v{color:var(--text);font-size:15px}
+
+/* 배경 섹션 */
+.bg-section{background:linear-gradient(180deg,#fafcfa 0%,#fff 100%);border:1px solid var(--line);border-radius:20px;padding:32px 32px;margin:20px 0}
+.bg-section .why{font-size:12px;font-weight:700;color:var(--primary-deep);letter-spacing:.04em;text-transform:uppercase;margin-bottom:8px}
+.bg-section h2{margin:0 0 4px;font-size:24px}
+.quote{border-left:3px solid var(--primary);padding:6px 0 6px 18px;margin:20px 0;color:var(--text);font-size:17px;line-height:1.55}
+.quote strong{font-weight:700}
+
+/* Painpoint 표 */
+.pain-table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14.5px}
+.pain-table th,.pain-table td{padding:11px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+.pain-table th{font-size:12px;color:var(--text-dim);font-weight:700;text-transform:uppercase;letter-spacing:.05em;background:var(--bg-soft)}
+.pain-table .p-badge{display:inline-block;font-size:11px;font-weight:800;padding:2px 7px;border-radius:5px;white-space:nowrap}
+.p-badge.p0{background:var(--warn-soft);color:#b0000a}
+.p-badge.p1{background:var(--primary-soft);color:var(--primary-deep)}
+.p-badge.p2{background:var(--bg-mute);color:var(--text-dim);text-decoration:line-through}
+.p-badge.p3{background:var(--amber-soft);color:#7a5000}
+
+/* 사용자 경험 리서치 */
+.research-meta{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:12px;color:var(--text-dim);background:var(--bg-soft);border:1px solid var(--line);border-radius:10px;padding:10px 16px;margin-bottom:20px}
+.research-meta .sep{color:var(--line-strong)}
+.research-block{border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;margin-bottom:16px}
+.research-label{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#92600a;background:var(--amber-soft);border-bottom:1px solid rgba(249,194,60,.3);padding:8px 20px}
+.consensus-list{display:flex;flex-direction:column}
+.consensus-item{display:flex;gap:14px;align-items:flex-start;padding:14px 20px;border-bottom:1px solid var(--bg-soft)}
+.consensus-item:last-child{border-bottom:none}
+.ci-num{flex-shrink:0;width:24px;height:24px;border-radius:6px;background:var(--amber-soft);color:#92600a;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;margin-top:1px}
+.ci-body{font-size:14px;color:var(--text)}
+.ci-body strong{display:block;font-weight:700;margin-bottom:3px}
+.ci-sub{display:block;font-size:13px;color:var(--text-sub);line-height:1.6}
+
+/* 사용자 동기 */
+.motivation-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:18px 0}
+.motivation-card{border:1px solid var(--line);border-radius:14px;background:#fff;padding:16px 18px}
+.motivation-card.primary{border-color:rgba(9,171,73,.28);background:linear-gradient(180deg,#fff 0%,#fbfffc 100%)}
+.motivation-label{display:inline-block;font-size:11px;font-weight:800;padding:3px 8px;border-radius:6px;background:var(--bg-mute);color:var(--text-dim);margin-bottom:9px}
+.motivation-card.primary .motivation-label{background:var(--primary-soft);color:var(--primary-deep)}
+.motivation-title{font-size:16px;font-weight:800;line-height:1.45;color:var(--text);margin-bottom:4px}
+.motivation-question{font-size:13px;font-weight:700;color:var(--text-sub);line-height:1.5;margin-bottom:8px}
+.motivation-desc{font-size:13px;color:var(--text-sub);line-height:1.6}
+.motivation-design{margin-top:10px;padding-top:10px;border-top:1px solid var(--bg-soft);font-size:12.5px;color:var(--text-dim);line-height:1.55}
+
+/* 컴포넌트 쇼케이스 */
+.factor-sample{background:#f0f2f5;border-radius:18px;padding:20px;margin:18px 0}
+.factor-sample-head{display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:12px;border-bottom:2px solid #1e1e23}
+.factor-sample-title{font-size:17px;font-weight:700;letter-spacing:-.4px;color:#1e1e23}
+.factor-sample-count{font-size:12px;font-weight:600;color:#767678;background:#edeff2;padding:2px 8px;border-radius:999px}
+.factor-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;align-items:start}
+.factor-case{display:flex;flex-direction:column;gap:6px}
+.factor-card{background:#fff;border-radius:14px;border:1px solid #edeff2;padding:14px 16px;display:flex;align-items:flex-start;gap:12px;width:100%}
+.factor-icon{width:40px;height:40px;border-radius:12px;flex-shrink:0;overflow:hidden;margin-top:1px}
+.factor-icon img{display:block;width:40px;height:40px}
+.factor-content{flex:1;min-width:0}
+.factor-row1{display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin-bottom:3px}
+.factor-title{font-size:15px;font-weight:600;color:#1e1e23;letter-spacing:-.02em;line-height:1.4}
+.factor-badge{display:inline-flex;align-items:center;font-size:11px;font-weight:700;padding:2px 6px;border-radius:4px;white-space:nowrap;flex-shrink:0;line-height:1.5}
+.factor-badge.neg{background:#fff3ee;color:#e05a2b}
+.factor-badge.pos{background:#eefff2;color:#09ab49}
+.factor-sub{font-size:14px;color:#767678;letter-spacing:-.02em;line-height:1.4}
+.factor-sub b{color:#404048;font-weight:600}
+.factor-ms{margin-top:6px;padding:7px 10px;background:#f6f8fa;border-radius:8px;font-size:12px;color:#767678;letter-spacing:-.01em;line-height:1.4}
+.factor-var-list{padding:0 4px;font-size:11px;line-height:1.4;color:#767678;letter-spacing:-.01em}
+.showcase-link{display:inline-flex;align-items:center;gap:6px;margin-top:12px;font-size:13px;font-weight:800;color:var(--primary-deep);text-decoration:none}
+.showcase-link:hover{text-decoration:underline}
+
+/* 유틸 */
+.kv{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+.kv .cell{border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.kv .cell .k{font-size:12px;color:var(--text-dim);font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.kv .cell .v{font-size:14.5px;color:var(--text)}
+.core{background:var(--primary-soft);border-radius:12px;padding:16px 20px;margin:16px 0;color:var(--primary-deep);font-size:15px;font-weight:600;line-height:1.6}
+
+footer{margin-top:80px;padding-top:24px;border-top:1px solid var(--line);font-size:13px;color:var(--text-dim)}
+
+@media(max-width:640px){
+  .wrap{padding:32px 18px 80px}
+  h1{font-size:28px}
+  h2{font-size:22px}
+  .summary .row,.kv{grid-template-columns:1fr}
+  .motivation-grid{grid-template-columns:1fr}
+  .factor-grid{grid-template-columns:1fr}
+  .resource-bar{flex-direction:column}
+  .res-link+.res-link{border-left:none;border-top:1px solid var(--line)}
+}
+</style>
+</head>
+<body>
+<main class="wrap">
+
+<!-- 리소스 바 -->
+<div class="resource-bar">
+  <a class="res-link md" href="KCB_내점수분석_기획서_v0.4.md" download>
+    <span class="res-icon">📄</span>
+    <span class="res-title">기획서 원본 (.md) v0.7</span>
+    <span class="res-action">↓ 다운로드</span>
+  </a>
+  <a class="res-link sub" href="신용영향요인_화면개선_기획서.html" target="_blank">
+    <span class="res-icon">🖥</span>
+    <span class="res-title">화면 개선 상세 기획서</span>
+    <span class="res-action">↗ 열기</span>
+  </a>
+</div>
+
+
+<!-- 01. 문서 헤더 -->
+<section class="hero">
+  <span class="eyebrow">기획서 · 2026-06-02 &nbsp;·&nbsp; v0.7</span>
+  <h1>KCB 내 점수 분석</h1>
+  <p class="lead">
+    "내 KCB 점수가 왜 이런지"를 긍정/부정 요인 최대 3가지씩으로 풀어 보여주고,
+    대출 연계를 강화하기 위해 <b> 대출비교 서비스 페이지로 연결</b>함.
+    추후에는, 긍/부정 요인에 따른 CTA와 목적지를 세분화하여 더 정교한 후속 액션을 제안하는 방향을 검토함
+  </p>
+  <div class="hero-meta">
+    <span><strong>구성</strong> 사용자 니즈 · 동기 분석 · 카드 컴포넌트</span>
+    <span><strong>상태</strong> 기획 확정 중 (v0.7)</span>
+    <span><strong>작성</strong> wg-seo</span>
+  </div>
+
+  <div class="summary">
+    <div class="row"><div class="k">한 줄 요약</div><div class="v">"왜 이런 점수가 나왔는지" 원인을 확인하고, 지금 내 상황에 맞는 다음 액션 페이지로 이동한다</div></div>
+    <div class="row"><div class="k">위치</div><div class="v">KCB 탭 신규 섹션 (NICE 탭 변경 없음)</div></div>
+    <div class="row"><div class="k">Phase 1 범위</div><div class="v">진단 페이지 + 대출 연계 브릿지 페이지</div></div>
+    <div class="row"><div class="k">API</div><div class="v"><code>POST /v1/credit/report/person/effect592</code> · 매번 실시간 호출</div></div>
+  </div>
+</section>
+
+<hr/>
+
+
+<!-- 02. 기획 배경 -->
+<div class="section-no">02 &nbsp;기획 배경</div>
+
+<!-- 2-0. 문제 정의 -->
+<section class="bg-section">
+  <div class="why">왜 지금 필요한가</div>
+  <h2>문제 정의</h2>
+
+  <p>
+    신용점수는 현재 <b>점수 변동에 대한 원인</b>을 알 수 없음.
+    사용자는 내 점수가 상승하거나, 하락했을 때 "왜?"라는 질문을 해도 <b>현재 서비스에서는 어떤 정보도 제공하고 있지 않음.</b>
+    원인을 알지 못하면 사용자는 점수 개선을 위한 액션을 취할 수 없고, <b>점수 변동에 무감각 해지거나, 무관심</b>으로 이어질 수 있음.
+  </p>
+
+  <table class="pain-table">
+    <thead>
+      <tr><th>우선순위</th><th>Painpoint</th><th>본 기획 처리</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="p-badge p0">P1 ⭐</span></td>
+        <td>"내 점수가 <b>왜</b> 이런지 모름"</td>
+        <td>KCB 영향 요인 카드 (긍/부정 각 최대 3개) — 진단 페이지</td>
+      </tr>
+      <tr>
+        <td><span class="p-badge p3">P3</span></td>
+        <td>"점수 떨어졌을 때 <b>원인 추적</b> 불가"</td>
+        <td>매번 실시간 호출 (진입 동선은 별도 기획)</td>
+      </tr>
+      <tr>
+        <td><span class="p-badge p3">P4</span></td>
+        <td>"내 상황이 <b>남들 대비</b> 어떤지 모름"</td>
+        <td><code>ratio</code>(전국민 보유 비중) 카드 메타로 노출 — ✅ v0.6 의미 확정</td>
+      </tr>
+      <tr>
+        <td><span class="p-badge p2">P2 ✕</span></td>
+        <td>뭘 해야 할지 모름 (개선 액션)</td>
+        <td>본 버전 제외 → v2로 이연</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="quote">
+    <strong>설계 원칙:</strong> 진단 페이지의 유일한 임무는 <b>"사용자가 어디로 가야 하는지 결정 → CTA 클릭 유도"</b>.
+    액션·상품 카드는 후속 목적지에서 전담한다.
+  </div>
+
+</section>
+
+
+<!-- 2-1. 사용자 리서치 -->
+<h2>2-1. 사용자 리서치 <span class="section-opt">UX 가설</span></h2>
+<p style="color:var(--text-sub)">AI 답변 3종(GPT · Gemini · Claude)을 종합해 정리한 사용자 니즈 가설. 실제 사용자 조사 결과로 단정하지 않고, 출시 후 분석 페이지 진입률·문구 이해도·하단 CTA 클릭률·부정요인 즉시 이탈률과 UT로 검증한다.</p>
+
+<div class="research-meta">
+  <span>AI 답변 3종 종합</span>
+  <span>사용자 니즈 분석</span>
+  <span>2026-06-17</span>
+  <span class="sep">|</span>
+  <span>점수 확인 → “왜?” 점화 → 납득/안심/행동</span>
+  <span class="sep">|</span>
+  <span>검증 필요</span>
+</div>
+
+<div class="research-block">
+  <div class="research-label">공통 UX 인사이트</div>
+  <div class="consensus-list">
+    <div class="consensus-item">
+      <div class="ci-num">1</div>
+      <div class="ci-body">
+        <strong>신용점수 원인 니즈는 상시적이지 않고 조건부로 강해진다</strong>
+        <span class="ci-sub">사용자는 평소에 점수 원인을 계속 궁금해하기보다, 점수가 하락했거나 예상보다 낮거나 대출·카드 발급처럼 신용점수가 실제 의사결정에 영향을 주는 순간에 “왜?”를 강하게 떠올릴 가능성이 높다.</span>
+      </div>
+    </div>
+    <div class="consensus-item">
+      <div class="ci-num">2</div>
+      <div class="ci-body">
+        <strong>“왜?”의 실제 동기는 안심, 납득, 개선 가능성 확인으로 나뉜다</strong>
+        <span class="ci-sub">사용자가 원하는 것은 복잡한 신용평가 산식이 아니라 “내 상태가 괜찮은가”, “왜 이렇게 나왔는가”, “내가 바꿀 수 있는 게 있는가”에 가깝다. 목적에 따라 필요한 정보 깊이와 CTA 강도가 달라진다.</span>
+      </div>
+    </div>
+    <div class="consensus-item">
+      <div class="ci-num">3</div>
+      <div class="ci-body">
+        <strong>사용자는 평가모델보다 내 행동과 점수 사이의 인과관계를 알고 싶어 한다</strong>
+        <span class="ci-sub">“최근 여러 곳에서 대출을 개설했어요”, “현재 현금서비스를 이용 중이에요”처럼 내 행동과 연결되는 문장이 필요하다. 공급자 중심 용어를 그대로 보여주면 사용자는 의미를 해석하기 전에 이탈할 수 있다.</span>
+      </div>
+    </div>
+    <div class="consensus-item">
+      <div class="ci-num">4</div>
+      <div class="ci-body">
+        <strong>원인 확인이 항상 개선 행동으로 이어진다고 보면 안 된다</strong>
+        <span class="ci-sub">원인을 본 뒤 “아, 그래서 그렇구나” 하고 납득 후 종료하는 사용자가 많을 수 있다. 따라서 CTA 클릭만 성공으로 보지 않고, 원인 이해와 안심 자체도 중요한 사용자 가치로 본다.</span>
+      </div>
+    </div>
+    <div class="consensus-item">
+      <div class="ci-num">5</div>
+      <div class="ci-body">
+        <strong>부정 요인은 도움과 불안을 동시에 만들 수 있다</strong>
+        <span class="ci-sub">연체, 부채, 중·고금리 대출처럼 민감한 요인은 판정·낙인처럼 보이면 회피를 만들 수 있다. 부정 요인은 현재 확인된 사실, 관리 가능성, 시간이 지나며 개선될 수 있는 조건을 함께 보여줘야 한다.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="research-block">
+  <div class="research-label">설계에 반영할 원칙</div>
+  <div class="consensus-list">
+    <div class="consensus-item">
+      <div class="ci-num">A</div>
+      <div class="ci-body">
+        <strong>진입은 점수와 가까운 곳에 두되, 모든 사용자에게 강하게 밀지 않는다</strong>
+        <span class="ci-sub">니즈가 강해지는 지점은 점수 하락, 예상 밖 점수, 대출·카드 발급 준비 같은 이벤트성 맥락이다. 메인과 최근 점수 탭에서는 점수 해석을 돕는 보조 진입으로 배치한다.</span>
+      </div>
+    </div>
+    <div class="consensus-item">
+      <div class="ci-num">B</div>
+      <div class="ci-body">
+        <strong>정보는 망라보다 선별, 상세보다 한 줄 이해를 우선한다</strong>
+        <span class="ci-sub">처음부터 많은 요인을 보여주기보다 긍정·부정 각 최대 3개로 제한하고, 타이틀과 서브타이틀만으로 핵심 원인이 읽히게 한다. 자세한 설명은 필요할 때 확장하는 구조가 적합하다.</span>
+      </div>
+    </div>
+    <div class="consensus-item">
+      <div class="ci-num">C</div>
+      <div class="ci-body">
+        <strong>CTA는 통제 가능한 요인과 사용자의 맥락이 맞을 때만 강해진다</strong>
+        <span class="ci-sub">대출 부담이나 중·고금리 대출처럼 사용자가 비교·상환 행동을 고려할 수 있는 요인은 대출비교로 연결할 수 있다. 반면 과거 기록처럼 즉시 바꾸기 어려운 요인은 무리한 CTA보다 납득과 회복 가능성 안내가 우선이다.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- 2-2. 사용자 동기 분석 -->
+<h2>2-2. 사용자 동기 분석 <span class="section-opt">진입 이유</span></h2>
+<p style="color:var(--text-sub)">신용점수 요인은 모든 사용자에게 같은 강도로 필요한 정보가 아니다. 사용자가 어떤 동기로 진입했는지에 따라 원하는 정보의 깊이, 불안 수준, CTA 수용도가 달라진다.</p>
+
+<div class="motivation-grid">
+  <div class="motivation-card">
+    <span class="motivation-label">안심 동기</span>
+    <div class="motivation-title">내 점수, 괜찮은 상태인가?</div>
+    <div class="motivation-question">“문제 없는지만 빠르게 확인하고 싶어요.”</div>
+    <div class="motivation-desc">점수가 안정적이거나 높은 사용자는 원인까지 깊게 보려는 의지가 약할 수 있다. 이 경우 요인 분석은 필수 탐색이 아니라 점수 해석을 돕는 보조 정보에 가깝다.</div>
+    <div class="motivation-design">설계 대응: 점수 근처에 가볍게 진입 배치 · 한 줄 요약 우선 · 과한 CTA 지양</div>
+  </div>
+  <div class="motivation-card primary">
+    <span class="motivation-label">납득 동기</span>
+    <div class="motivation-title">왜 떨어졌거나 예상보다 낮지?</div>
+    <div class="motivation-question">“내가 뭘 했길래 이렇게 나온 건지 알고 싶어요.”</div>
+    <div class="motivation-desc">점수 하락, 예상 밖 점수, 납득되지 않는 변동이 생기면 원인 확인 니즈가 강해진다. 이때 사용자는 상세한 산식보다 내 행동과 점수 사이의 연결을 찾는다.</div>
+    <div class="motivation-design">설계 대응: 핵심 요인 선별 · 사용자 행동 언어 사용 · 판정이 아닌 설명 톤 유지</div>
+  </div>
+  <div class="motivation-card primary">
+    <span class="motivation-label">통제 동기</span>
+    <div class="motivation-title">내가 바꿀 수 있는 게 있나?</div>
+    <div class="motivation-question">“지금 관리하면 좋아질 수 있는 항목을 알고 싶어요.”</div>
+    <div class="motivation-desc">원인을 확인한 사용자는 자연스럽게 개선 가능성을 찾는다. 단, 과거 이력처럼 당장 바꾸기 어려운 요인만 노출되면 무력감이 커질 수 있다.</div>
+    <div class="motivation-design">설계 대응: 관리 가능한 요인과 시간이 필요한 요인 구분 · 개선 가능 문구 제공</div>
+  </div>
+  <div class="motivation-card primary">
+    <span class="motivation-label">의사결정 동기</span>
+    <div class="motivation-title">대출·카드 조건에 영향이 있을까?</div>
+    <div class="motivation-question">“신청 전에 내 상태를 알고 싶어요.”</div>
+    <div class="motivation-desc">대출, 카드 발급, 전세자금처럼 금융 의사결정이 가까운 사용자는 원인 정보보다 다음 판단에 도움이 되는 해석과 연결을 기대할 수 있다.</div>
+    <div class="motivation-design">설계 대응: 대출 관련 요인은 대출비교 CTA 연결 · 심사 결과 단정 표현은 피함</div>
+  </div>
+  <div class="motivation-card">
+    <span class="motivation-label">회피 동기</span>
+    <div class="motivation-title">부정적인 정보는 보고 싶지 않다</div>
+    <div class="motivation-question">“봐도 바꿀 수 없으면 더 불안할 것 같아요.”</div>
+    <div class="motivation-desc">부정 요인은 사용자의 불안, 억울함, 회피를 만들 수 있다. 특히 통제 불가능한 원인을 강하게 노출하면 신용관리 기능 자체를 피할 수 있다.</div>
+    <div class="motivation-design">설계 대응: 낙인 표현 금지 · 사실과 회복 가능성 병기 · CTA 강요하지 않음</div>
+  </div>
+</div>
+
+<div class="core">
+  핵심: “점수 요인을 보고 싶다”는 하나의 니즈가 아니라, 안심·납득·통제·의사결정·회피 동기가 섞인 상태다. 따라서 진입은 가볍게, 카드 설명은 쉽게, CTA는 맥락이 맞을 때만 강하게 설계한다.
+</div>
+
+
+<!-- 2-3. 컴포넌트 쇼케이스 -->
+<h2>2-3. 신용영향 요인 카드 컴포넌트 쇼케이스 <span class="section-opt">문구 / 표시 기준</span></h2>
+<p style="color:var(--text-sub)">KCB 응답으로 받은 긍정·부정 요인을 사용자가 이해할 수 있는 카드 문구로 변환한다. 응답에 없는 값은 추론하지 않으며, 필요한 변수는 <code>{기간}</code>, <code>{기관수}</code>, <code>{부채수준}</code>처럼 명시한다.</p>
+
+<div class="factor-sample">
+  <div class="factor-sample-head">
+    <span class="factor-sample-title">대표 카드 예시</span>
+    <span class="factor-sample-count">factor-showcase 기준</span>
+  </div>
+  <div class="factor-grid">
+    <div class="factor-case">
+      <div class="factor-card">
+        <div class="factor-icon"><img src="prototype/icons/icon_01.png" alt=""></div>
+        <div class="factor-content">
+          <div class="factor-row1"><span class="factor-title">현재 연체가 진행 중이에요</span><span class="factor-badge neg">부정</span></div>
+          <div class="factor-sub"><b>{연체일수} 이상</b> 연체했어요</div>
+          <div class="factor-ms">연체 이력이 없어지면 긍정 요인이 될 수 있어요</div>
+        </div>
+      </div>
+      <div class="factor-var-list">* {연체일수}: 15일, 30일, 45일</div>
+    </div>
+    <div class="factor-case">
+      <div class="factor-card">
+        <div class="factor-icon"><img src="prototype/icons/icon_03.png" alt=""></div>
+        <div class="factor-content">
+          <div class="factor-row1"><span class="factor-title">최근 여러 곳에서 대출을 개설했어요</span><span class="factor-badge neg">부정</span></div>
+          <div class="factor-sub">최근 6개월 내 <b>{기관수} 이상</b> 확인돼요</div>
+          <div class="factor-ms">신규 대출 없이 유지하면 긍정 요인이 될 수 있어요</div>
+        </div>
+      </div>
+      <div class="factor-var-list">* R47/R48 · {기관수}: 2곳, 4곳</div>
+    </div>
+    <div class="factor-case">
+      <div class="factor-card">
+        <div class="factor-icon"><img src="prototype/icons/icon_09.png" alt=""></div>
+        <div class="factor-content">
+          <div class="factor-row1"><span class="factor-title">중·고금리 대출을 보유 중이에요</span><span class="factor-badge neg">부정</span></div>
+          <div class="factor-sub">비은행권 <b>{기관수} 이상</b>으로 확인돼요</div>
+          <div class="factor-ms">상환을 꾸준히 이어가면 긍정 요인이 될 수 있어요</div>
+        </div>
+      </div>
+      <div class="factor-var-list">* R38 · {기관수}: 1곳</div>
+    </div>
+    <div class="factor-card">
+      <div class="factor-icon"><img src="prototype/icons/icon_07.png" alt=""></div>
+      <div class="factor-content">
+        <div class="factor-row1"><span class="factor-title">현재 현금서비스를 이용 중이에요</span><span class="factor-badge neg">부정</span></div>
+        <div class="factor-sub">전국민 <b>--%</b> 해당돼요</div>
+        <div class="factor-ms">현금서비스를 끊으면 긍정 요인이 될 수 있어요</div>
+      </div>
+    </div>
+    <div class="factor-card">
+      <div class="factor-icon"><img src="prototype/icons/icon_02.png" alt=""></div>
+      <div class="factor-content">
+        <div class="factor-row1"><span class="factor-title">연체한 경험이 없어요</span><span class="factor-badge pos">긍정</span></div>
+        <div class="factor-sub">전국민 <b>--%</b> 해당돼요</div>
+      </div>
+    </div>
+    <div class="factor-card">
+      <div class="factor-icon"><img src="prototype/icons/icon_08.png" alt=""></div>
+      <div class="factor-content">
+        <div class="factor-row1"><span class="factor-title">신용카드를 오래 보유했어요</span><span class="factor-badge pos">긍정</span></div>
+        <div class="factor-sub">전국민 <b>--%</b> 해당돼요</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="core">
+  카드 기준: 타이틀은 원인, 서브 타이틀은 전국민 비중 또는 변수 기반 사실, CTA는 후속 목적지로 분리한다.<br/>
+  전체 케이스는 <a class="showcase-link" href="prototype/factor-showcase.html" target="_blank">신용영향 요인 컴포넌트 쇼케이스</a>에서 확인한다.
+</div>
+
+<hr/>
+
+<!-- 15. UT 결과 -->
+<div class="section-no">15 &nbsp;UT 결과 — 페르소나 시뮬레이션</div>
+<h2>UT 시뮬레이션 결과 <span class="section-opt">n=1,000 · 2026-06-06</span></h2>
+<p style="color:var(--text-sub)">네이버페이 1,000명 합성 페르소나 기반 AI 시뮬레이션. 상세 계획: <a href="prototype/ut-plan.html" target="_blank">ut-plan.html</a></p>
+
+<!-- 요약 KPI -->
+<div class="kv" style="grid-template-columns:repeat(2,1fr);margin:20px 0">
+  <div class="cell" style="border-color:rgba(9,171,73,.3);background:var(--primary-soft)">
+    <div class="k">가설 통과</div>
+    <div class="v" style="font-size:28px;font-weight:800;color:var(--primary-deep)">4 / 4</div>
+  </div>
+  <div class="cell">
+    <div class="k">시뮬레이션 페르소나</div>
+    <div class="v" style="font-size:28px;font-weight:800">1,000명</div>
+  </div>
+</div>
+
+<!-- 세그먼트 분포 -->
+<h3>세그먼트 분포</h3>
+<table class="pain-table">
+  <thead><tr><th>세그먼트</th><th style="text-align:right">비중</th><th style="text-align:right">n</th></tr></thead>
+  <tbody>
+    <tr><td>대출보유 + 부정요인 다수 (2개↑)</td><td style="text-align:right">32%</td><td style="text-align:right">320</td></tr>
+    <tr><td>부정요인 1개 (P1–P2 강도)</td><td style="text-align:right">25%</td><td style="text-align:right">250</td></tr>
+    <tr><td>긍정요인만 (부정 0건)</td><td style="text-align:right">18%</td><td style="text-align:right">180</td></tr>
+    <tr><td>신용형성 부족 (THIN_FILE 후보)</td><td style="text-align:right">15%</td><td style="text-align:right">150</td></tr>
+    <tr><td>현재 연체 P0</td><td style="text-align:right">6%</td><td style="text-align:right">60</td></tr>
+    <tr><td>신용 우량 (800점↑)</td><td style="text-align:right">4%</td><td style="text-align:right">40</td></tr>
+  </tbody>
+</table>
+
+<!-- 가설 검증 결과 -->
+<h3>가설 검증 결과 (4개)</h3>
+<table class="pain-table">
+  <thead><tr><th>#</th><th>가설</th><th>목표</th><th>실측</th><th>판정</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><span class="p-badge p1">H1</span></td>
+      <td>30초 내 긍/부정 배지 의미 인지</td>
+      <td>85%</td>
+      <td><b>88%</b></td>
+      <td style="color:var(--primary-deep);font-weight:700">✅ 통과</td>
+    </tr>
+    <tr>
+      <td><span class="p-badge p1">H2</span></td>
+      <td>본인 부정 요인 파악 태스크 성공</td>
+      <td>80%</td>
+      <td><b>83%</b></td>
+      <td style="color:var(--primary-deep);font-weight:700">✅ 통과</td>
+    </tr>
+    <tr>
+      <td><span class="p-badge p1">H3</span></td>
+      <td>마일스톤 팁이 개선 동기를 자극</td>
+      <td>3.8/5</td>
+      <td><b>3.9</b></td>
+      <td style="color:var(--primary-deep);font-weight:700">✅ 통과</td>
+    </tr>
+
+    <tr>
+      <td><span class="p-badge p1">H7</span></td>
+      <td>긍정 요인 확인 후 자기효능감 상승</td>
+      <td>75%</td>
+      <td><b>81%</b></td>
+      <td style="color:var(--primary-deep);font-weight:700">✅ 통과</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- 주요 발견 -->
+<h3>주요 발견</h3>
+<div class="research-block">
+  <div class="research-label">핵심 인사이트 3가지</div>
+  <div class="consensus-list">
+    <div class="consensus-item">
+      <div class="ci-num">F1</div>
+      <div class="ci-body">
+        <strong>ratio 희소성 문구 → 자기효능감에 가장 강한 영향</strong>
+        <span class="ci-sub">"전국민 18%만 해당하는 강점이에요" 문구에서 자기효능감 상승 응답 집중. ratio 활용을 긍정 카드에서 더 강조할수록 H7 지표 개선 효과 기대.</span>
+      </div>
+    </div>
+    <div class="consensus-item">
+      <div class="ci-num">F2</div>
+      <div class="ci-body">
+        <strong>THIN_FILE 배지 인지율 74% — 유일한 미달 서브그룹</strong>
+        <span class="ci-sub">금융 거래 경험 부족으로 배지(긍정/부정) 맥락 자체를 낯설게 받아들임. "이 요인은 점수를 높이는 데 도움이 돼요" 같은 배지 설명 툴팁 필요.</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- 개선 권고 -->
+<h3>개선 권고</h3>
+<table class="pain-table">
+  <thead><tr><th>우선순위</th><th>항목</th><th>권고</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><span class="p-badge p1">P1</span></td>
+      <td>THIN_FILE 배지 툴팁</td>
+      <td>첫 진단 진입 시 배지 설명 바텀시트 1회 노출 (이후 숨김)</td>
+    </tr>
+    <tr>
+      <td><span class="p-badge p1">P1</span></td>
+      <td>ratio 활용 강화</td>
+      <td>긍정 카드에 "전국민 OO%만" 희소성 문구 default 노출 강화</td>
+    </tr>
+  </tbody>
+</table>
+<p style="font-size:13px;color:var(--text-dim);margin-top:6px">페르소나 페이지 관련 개선 권고(OVERDUE CTA, SHORT_TERM 금액 시뮬)는 페르소나 분기 도입 시 재작성 예정.</p>
+
+<hr/>
+
+<footer>
+  <p>KCB 내 점수 분석 · 기획서 v0.7 · 2026-06-02 작성 / 2026-06-18 업데이트</p>
+  <p>사용자 니즈 분석: AI 답변/GPT_사용자니즈분석.md · Gemini_사용자니즈분석.md · Claude_사용자니즈분석.md</p>
+  <p>KCB K-Score 2.0 리즌코드 v2 (91개 메시지 기준)</p>
+</footer>
+
+</main>
+</body>
+</html><!-- 페르소나별 분석 - 미구현 -->
+<h3>Phase 1 페르소나별 분석</h3>
+<p style="color:var(--text-sub);background:#f5f5f5;padding:12px 16px;border-radius:10px;font-size:14px">
+  &#x26D4; 현재 버전에서 <b>페르소나 분기 미구현</b> &mdash; 페르소나 페이지 도입 시 재작성 예정.
+</p>
+
+
