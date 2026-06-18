@@ -1,0 +1,477 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>KCB 신용영향 요인 — UT 계획서</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" />
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+<style>
+  :root{
+    --bg:#fff; --bg-soft:#f7f8fa; --bg-mute:#eef0f3;
+    --line:#e5e8ec; --text:#191f28; --text-sub:#4e5968; --text-dim:#8b95a1;
+    --primary:#09AB49; --primary-soft:#e8f7ee; --primary-deep:#067a36;
+    --warn:#f04452; --accent:#f9c23c;
+    --neg:#E05A2B; --neg-soft:#FFF3EE;
+    --radius:14px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--text)}
+  body{font-family:'Pretendard Variable',Pretendard,-apple-system,sans-serif;font-feature-settings:"ss01","ss03";letter-spacing:-.018em;line-height:1.6;font-size:16px}
+  .wrap{max-width:900px;margin:0 auto;padding:64px 24px 120px}
+  h1,h2,h3,h4{letter-spacing:-.025em;margin:0}
+  h1{font-size:38px;font-weight:800;line-height:1.2}
+  h2{font-size:24px;font-weight:800;margin:56px 0 16px}
+  h3{font-size:18px;font-weight:700;margin:28px 0 10px}
+  h4{font-size:14px;font-weight:700;color:var(--text-sub);margin:16px 0 6px;text-transform:uppercase;letter-spacing:.04em}
+  p{margin:10px 0}
+  ul,ol{padding-left:20px;margin:8px 0}
+  li{margin:5px 0}
+  hr{border:0;border-top:1px solid var(--line);margin:48px 0}
+  a{color:var(--primary-deep)}
+
+  .eyebrow{display:inline-block;font-size:12px;font-weight:700;color:var(--primary-deep);background:var(--primary-soft);padding:5px 12px;border-radius:999px;letter-spacing:.02em}
+  .lead{font-size:17px;color:var(--text-sub);margin-top:14px;max-width:700px}
+  .meta{margin-top:20px;font-size:13px;color:var(--text-dim);display:flex;gap:20px;flex-wrap:wrap}
+  .meta strong{color:var(--text-sub);font-weight:600}
+
+  .summary-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:16px;overflow:hidden;margin:28px 0}
+  .strip-cell{background:#fff;padding:18px 20px;text-align:center}
+  .strip-cell .val{font-size:26px;font-weight:800;color:var(--primary-deep)}
+  .strip-cell .lbl{font-size:12px;color:var(--text-dim);margin-top:4px}
+
+  .hypo-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+  .hypo{border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+  .hypo .num{display:inline-block;width:22px;height:22px;border-radius:50%;background:var(--primary);color:#fff;font-size:11px;font-weight:700;text-align:center;line-height:22px;margin-bottom:10px}
+  .hypo .q{font-size:14px;font-weight:700;color:var(--text);margin:0 0 6px}
+  .hypo .pass{font-size:12px;color:var(--text-sub)}
+  .hypo .pass b{color:var(--primary-deep)}
+
+  .seg-table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+  .seg-table th{background:var(--bg-soft);font-size:12px;color:var(--text-dim);font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:10px 14px;text-align:left;border-bottom:2px solid var(--line)}
+  .seg-table td{padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+  .seg-table tr:last-child td{border-bottom:none}
+  .seg-table .cnt{font-weight:700;color:var(--primary-deep);font-variant-numeric:tabular-nums}
+  .seg-table .core{background:var(--primary-soft)}
+  .tag{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:99px}
+  .tag.core{background:var(--primary);color:#fff}
+  .tag.sub{background:var(--bg-mute);color:var(--text-sub)}
+  .tag.opt{background:#fff3cd;color:#7a5c00;border:1px solid var(--accent)}
+
+  .persona-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:16px 0}
+  .persona-card{border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+  .persona-card .p-key{font-size:11px;font-weight:700;font-family:monospace;color:var(--text-dim);margin-bottom:6px}
+  .persona-card .p-title{font-size:15px;font-weight:700;color:var(--text);margin-bottom:4px}
+  .persona-card .p-desc{font-size:13px;color:var(--text-sub)}
+  .persona-card .p-cta{margin-top:8px;font-size:12px;font-weight:700;color:var(--primary-deep);background:var(--primary-soft);display:inline-block;padding:2px 8px;border-radius:99px}
+
+  .scenario{border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin:12px 0}
+  .scenario-header{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+  .s-num{width:32px;height:32px;border-radius:10px;background:var(--bg-soft);border:1px solid var(--line);font-size:14px;font-weight:800;color:var(--text);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .s-title{font-size:16px;font-weight:700;color:var(--text)}
+  .s-tag{font-size:11px;font-weight:700;padding:2px 9px;border-radius:99px}
+  .s-tag.required{background:var(--primary);color:#fff}
+  .s-tag.optional{background:var(--bg-mute);color:var(--text-sub)}
+  .scenario .context{font-size:13px;color:var(--text-sub);background:var(--bg-soft);border-radius:8px;padding:10px 14px;margin-bottom:12px;border-left:3px solid var(--line);font-style:italic}
+  .scenario .task{font-size:14.5px;color:var(--text);margin:8px 0}
+  .scenario .observe{font-size:13px;color:var(--text-dim);margin-top:12px;padding-top:10px;border-top:1px solid var(--line)}
+  .scenario .observe strong{color:var(--text-sub)}
+
+  .metric-table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+  .metric-table th{background:var(--bg-soft);font-size:12px;color:var(--text-dim);font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:10px 14px;text-align:left;border-bottom:2px solid var(--line)}
+  .metric-table td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+  .metric-table tr:last-child td{border-bottom:none}
+  .pill{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:99px;white-space:nowrap}
+  .pill.q{background:#e8f0fe;color:#1a56db}
+  .pill.qt{background:#fce8e6;color:#c5221f}
+  .pill.both{background:#fff3cd;color:#7a5c00}
+
+  .timeline{display:flex;flex-direction:column;gap:0;margin:16px 0}
+  .tl-item{display:grid;grid-template-columns:120px 1fr;gap:0}
+  .tl-left{padding:14px 16px 14px 0;border-right:2px solid var(--line);text-align:right;position:relative}
+  .tl-dot{position:absolute;right:-7px;top:20px;width:12px;height:12px;border-radius:50%;background:var(--primary);border:2px solid #fff}
+  .tl-right{padding:14px 0 14px 20px}
+  .tl-date{font-size:12px;font-weight:700;color:var(--primary-deep)}
+  .tl-right h4{margin:0 0 4px;font-size:14px;font-weight:700;color:var(--text);text-transform:none;letter-spacing:0}
+  .tl-right p{margin:0;font-size:13px;color:var(--text-sub)}
+
+  .notice{background:#fffbe6;border:1px solid var(--accent);border-radius:12px;padding:14px 18px;font-size:13px;color:#5a4a00;margin:16px 0}
+
+  @media(max-width:640px){
+    h1{font-size:28px}
+    .summary-strip{grid-template-columns:repeat(2,1fr)}
+    .hypo-grid,.persona-grid{grid-template-columns:1fr}
+    .tl-item{grid-template-columns:90px 1fr}
+  }
+</style>
+</head>
+<body>
+<main class="wrap">
+
+  <!-- HERO -->
+  <section style="padding:48px 0 24px">
+    <span class="eyebrow">UT 계획서 · 2026.06.10</span>
+    <h1 style="margin-top:16px">KCB 신용영향 요인<br>사용성 테스트 계획</h1>
+    <p class="lead">
+      Phase 1 프로토타입을 대상으로 <b>1,000명 페르소나 AI 시뮬레이션</b>으로 핵심 가설을 검증하고,<br>
+      요인 카드 UX와 페르소나 페이지 CTA 전환 구조를 개선한다.
+    </p>
+    <div class="meta">
+      <span><strong>대상 프로토타입</strong> <a href="https://swg2210.github.io/kcb-credit-prototype/" target="_blank">kcb-credit-prototype</a></span>
+      <span><strong>페르소나 풀</strong> 네이버페이 1,000명</span>
+      <span><strong>작성자</strong> wg-seo</span>
+    </div>
+  </section>
+
+  <!-- 요약 수치 -->
+  <div class="summary-strip">
+    <div class="strip-cell">
+      <div class="val">7</div>
+      <div class="lbl">검증 가설</div>
+    </div>
+    <div class="strip-cell">
+      <div class="val">1,000</div>
+      <div class="lbl">시뮬레이션 페르소나</div>
+    </div>
+    <div class="strip-cell">
+      <div class="val">5</div>
+      <div class="lbl">테스트 시나리오</div>
+    </div>
+    <div class="strip-cell">
+      <div class="val">4종</div>
+      <div class="lbl">Phase 1 페르소나</div>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- 1. UT 목적 & 가설 -->
+  <h2>1. UT 목적 & 검증 가설</h2>
+  <p style="color:var(--text-sub)">
+    실 KCB 리즌코드 연동 전, 프로토타입 수준에서 <b>요인 카드 인지 구조</b>와 <b>페르소나 CTA 전환 의향</b>을 검증한다.
+    UX 구조 문제와 콘텐츠 품질 문제를 분리하는 유일한 타이밍.
+  </p>
+
+  <div class="hypo-grid">
+    <div class="hypo">
+      <div class="num">1</div>
+      <p class="q">"긍정 / 부정" 배지를 처음 보고 즉시 이해하는가?</p>
+      <p class="pass">통과 기준: <b>참가자 85% 이상</b>이 30초 이내 배지 의미 설명 가능</p>
+    </div>
+    <div class="hypo">
+      <div class="num">2</div>
+      <p class="q">요인 카드 리스트에서 "내 점수를 올리려면 무엇을 해야 하는지" 파악하는가?</p>
+      <p class="pass">통과 기준: <b>태스크 성공률 80%</b> 이상, 평균 소요시간 60초 이내</p>
+    </div>
+    <div class="hypo">
+      <div class="num">3</div>
+      <p class="q">마일스톤 팁이 다음 행동 동기를 자극하는가?</p>
+      <p class="pass">통과 기준: <b>5점 척도 평균 3.8 이상</b> (부정 요인 보유 그룹 한정)</p>
+    </div>
+    <div class="hypo">
+      <div class="num">4</div>
+      <p class="q">부정 요인 카드를 클릭해 페르소나 페이지로 진입하는가?</p>
+      <p class="pass">통과 기준: <b>부정 요인 보유 페르소나 70% 이상</b> 자발적 클릭</p>
+    </div>
+    <div class="hypo">
+      <div class="num">5</div>
+      <p class="q">페르소나 페이지의 "한 줄 처방"이 내 상황에 맞게 느껴지는가?</p>
+      <p class="pass">통과 기준: <b>5점 척도 평균 4.0 이상</b> — "내 상황에 딱 맞는 설명이다"</p>
+    </div>
+    <div class="hypo">
+      <div class="num">6</div>
+      <p class="q">페르소나 페이지 Primary CTA를 클릭할 의향이 생기는가?</p>
+      <p class="pass">통과 기준: <b>해당 페르소나 60% 이상</b> CTA 클릭 의향 응답</p>
+    </div>
+    <div class="hypo" style="grid-column:span 2">
+      <div class="num">7</div>
+      <p class="q">긍정 요인 확인 후 "내 신용을 잘 관리하고 있다"는 자기효능감이 높아지는가?</p>
+      <p class="pass">통과 기준: <b>긍정 요인 2개 이상 보유 페르소나 75% 이상</b>에서 자기효능감 상승 응답</p>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- 2. 참가자 구성 -->
+  <h2>2. UT 대상 — 1,000명 페르소나 AI 시뮬레이션</h2>
+  <p style="color:var(--text-sub)">
+    실제 사용자 리쿠르팅 대신 <b>네이버페이 1,000명 합성 페르소나</b>를 UT 대상으로 사용한다.
+    각 페르소나에 KCB 신용 상황(점수대·보유 요인·대출 현황)을 부여해 시나리오별 반응을 시뮬레이션한다.
+  </p>
+
+  <h3>신용 상황별 세그먼트</h3>
+  <table class="seg-table">
+    <thead>
+      <tr><th>세그먼트</th><th>인원</th><th>비중</th><th>UT 관점 특이사항</th><th>구분</th></tr>
+    </thead>
+    <tbody>
+      <tr class="core">
+        <td><strong>대출 보유 + 부정 요인 2개↑</strong></td>
+        <td class="cnt">320명</td>
+        <td>32%</td>
+        <td>핵심 타겟. 페르소나 페이지 CTA 전환 가능성 최상</td>
+        <td><span class="tag core">핵심</span></td>
+      </tr>
+      <tr class="core">
+        <td><strong>부정 요인 1개 (P1–P2)</strong></td>
+        <td class="cnt">250명</td>
+        <td>25%</td>
+        <td>마일스톤 팁 반응 및 개선 의향 측정 핵심 그룹</td>
+        <td><span class="tag core">핵심</span></td>
+      </tr>
+      <tr>
+        <td><strong>긍정 요인만 보유</strong></td>
+        <td class="cnt">180명</td>
+        <td>18%</td>
+        <td>자기효능감 가설 검증. 서비스 NPS 기준선 역할</td>
+        <td><span class="tag sub">보조</span></td>
+      </tr>
+      <tr>
+        <td><strong>신용 형성 부족 (P3)</strong></td>
+        <td class="cnt">150명</td>
+        <td>15%</td>
+        <td>20대 초반. 서비스 진입 동기 및 카드 개설 CTA 반응</td>
+        <td><span class="tag sub">보조</span></td>
+      </tr>
+      <tr>
+        <td><strong>현재 연체 중 (P0)</strong></td>
+        <td class="cnt">60명</td>
+        <td>6%</td>
+        <td>P0 카드 노출 여부 정책 판단용. 서비스 진입 차단 vs 상환 유도 반응 측정</td>
+        <td><span class="tag opt">옵션</span></td>
+      </tr>
+      <tr>
+        <td><strong>신용 우량 (800점↑)</strong></td>
+        <td class="cnt">40명</td>
+        <td>4%</td>
+        <td>긍정 요인 다수 보유. 카드 유지 동기 측정. 비타겟 기준선</td>
+        <td><span class="tag opt">옵션</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <hr>
+
+  <!-- 3. Phase 1 페르소나 -->
+  <h2>3. Phase 1 페르소나 4종</h2>
+  <p style="color:var(--text-sub)">각 페르소나는 서비스 내 부정 요인 카드 클릭 시 진입하는 상세 페이지다. 4종 모두 시뮬레이션 대상.</p>
+
+  <div class="persona-grid">
+    <div class="persona-card">
+      <div class="p-key">MULTI_LOAN</div>
+      <div class="p-title">대출 갈아타기</div>
+      <div class="p-desc">대출이 여러 곳에 분산, 부채수준 과다. 대환대출 통합으로 이자 부담 절감 유도.</div>
+      <span class="p-cta">Primary CTA → 대출비교</span>
+    </div>
+    <div class="persona-card">
+      <div class="p-key">HIGH_RATE_DEPENDENT</div>
+      <div class="p-title">고금리 탈출</div>
+      <div class="p-desc">저축은행·대부업 등 고금리 대출 다기관 보유. 낮은 금리로 갈아타기 유도.</div>
+      <span class="p-cta">Primary CTA → 대출비교</span>
+    </div>
+    <div class="persona-card">
+      <div class="p-key">SHORT_TERM_CARD_LOAN</div>
+      <div class="p-title">현금서비스 끊기</div>
+      <div class="p-desc">현금서비스 반복 이용 중. 마이너스통장·신용대출 전환으로 비용 절감 유도.</div>
+      <span class="p-cta">Primary CTA → 카드·대출 비교</span>
+    </div>
+    <div class="persona-card">
+      <div class="p-key">OVERDUE_CURRENT</div>
+      <div class="p-title">연체 관리</div>
+      <div class="p-desc">현재 연체 진행 중. 빠른 상환 가이드 및 채무조정 안내 제공.</div>
+      <span class="p-cta">Primary CTA → 연체 상환 가이드</span>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- 4. 테스트 시나리오 -->
+  <h2>4. 테스트 시나리오</h2>
+
+  <div class="scenario">
+    <div class="scenario-header">
+      <div class="s-num">S1</div>
+      <span class="s-title">서비스 첫 인상 & 목적 파악</span>
+      <span class="s-tag required">필수</span>
+    </div>
+    <div class="context">페르소나는 네이버페이 앱에서 KCB 신용점수 탭 → "내 점수 분석" 버튼을 눌러 서비스에 처음 진입한다.</div>
+    <div class="task">📌 <b>태스크:</b> 화면을 30초간 살펴본 후 "이 화면이 무엇을 보여주는 것인지" 설명해보세요.</div>
+    <div class="observe">
+      <strong>관찰 포인트:</strong>
+      "긍정 / 부정" 배지 즉시 인지 여부 · 요인 리스트가 "내 신용점수를 설명하는 것"임을 파악하는지 · 첫 스크롤 방향과 시선 고정 위치
+    </div>
+  </div>
+
+  <div class="scenario">
+    <div class="scenario-header">
+      <div class="s-num">S2</div>
+      <span class="s-title">부정 요인 확인 & 마일스톤 팁 반응</span>
+      <span class="s-tag required">필수</span>
+    </div>
+    <div class="context">부정 요인 2개↑ 보유 페르소나. 화면에 부정 배지가 붙은 카드가 여러 개 보인다.</div>
+    <div class="task">📌 <b>태스크:</b> 본인의 점수에 가장 크게 영향을 주는 부정 요인이 무엇인지 찾아보세요. 그 카드의 "마일스톤 팁"을 읽고 어떤 느낌인지 말해주세요.</div>
+    <div class="observe">
+      <strong>관찰 포인트:</strong>
+      마일스톤 팁의 존재 인지 여부 · "~하면 긍정 요인이 될 수 있어요" 문구의 동기 자극 여부 · 서브텍스트("전국민 --%") 반응
+    </div>
+  </div>
+
+  <div class="scenario">
+    <div class="scenario-header">
+      <div class="s-num">S3</div>
+      <span class="s-title">페르소나 페이지 진입 & 처방 이해</span>
+      <span class="s-tag required">필수</span>
+    </div>
+    <div class="context">MULTI_LOAN 또는 HIGH_RATE_DEPENDENT 페르소나. 요인 카드를 클릭해 상세 페이지로 이동한다.</div>
+    <div class="task">📌 <b>태스크:</b> 화면이 본인 상황에 맞게 느껴지나요? "한 줄 처방"이 무슨 의미인지 설명해보세요.</div>
+    <div class="observe">
+      <strong>관찰 포인트:</strong>
+      진단 요약 카드 echo 인지 여부 · 한 줄 처방의 개인화 느낌 · "내 얘기가 아닌 것 같다" 반응 여부
+    </div>
+  </div>
+
+  <div class="scenario">
+    <div class="scenario-header">
+      <div class="s-num">S4</div>
+      <span class="s-title">CTA 전환 의향 측정</span>
+      <span class="s-tag required">필수</span>
+    </div>
+    <div class="context">페르소나 페이지 하단 Primary CTA가 보인다.</div>
+    <div class="task">📌 <b>태스크:</b> 이 버튼을 누를 것 같나요? 왜 그런지 / 왜 아닌지 설명해보세요.</div>
+    <div class="observe">
+      <strong>관찰 포인트:</strong>
+      CTA 문구("대출 갈아타기 비교 →") 명확성 · 진입 심리적 장벽 · "나중에 볼게" vs "지금 바로" 반응 분포
+    </div>
+  </div>
+
+  <div class="scenario">
+    <div class="scenario-header">
+      <div class="s-num">S5</div>
+      <span class="s-title">긍정 요인 확인 & 자기효능감</span>
+      <span class="s-tag optional">선택</span>
+    </div>
+    <div class="context">긍정 요인만 보유 또는 긍정 요인 2개↑ 페르소나.</div>
+    <div class="task">📌 <b>태스크:</b> 긍정 배지가 붙은 카드들을 보고 어떤 느낌인지 말해보세요. 이 서비스를 앞으로도 주기적으로 확인할 것 같나요?</div>
+    <div class="observe">
+      <strong>관찰 포인트:</strong>
+      "전국민 18%만 해당" 희소성 문구 반응 · 긍정 요인이 보상감을 주는지 · 재방문 의향 자극 여부
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- 5. 측정 지표 -->
+  <h2>5. 측정 지표</h2>
+
+  <table class="metric-table">
+    <thead>
+      <tr><th>지표</th><th>측정 방식</th><th>목표치</th><th>유형</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>배지 인지율</strong> (긍정/부정 즉시 이해)</td>
+        <td>S1 응답 분석 — 30초 내 정확 설명</td>
+        <td>85%↑</td>
+        <td><span class="pill q">정성</span></td>
+      </tr>
+      <tr>
+        <td><strong>요인 파악 태스크 성공률</strong></td>
+        <td>S2 — 자신의 가장 큰 부정 요인 정확 지목</td>
+        <td>80%↑</td>
+        <td><span class="pill qt">정량</span></td>
+      </tr>
+      <tr>
+        <td><strong>마일스톤 팁 동기 점수</strong></td>
+        <td>S2 — 5점 척도 자기 평가</td>
+        <td>3.8↑</td>
+        <td><span class="pill both">혼합</span></td>
+      </tr>
+      <tr>
+        <td><strong>페르소나 페이지 진입율</strong></td>
+        <td>S2/S3 — 부정 요인 카드 클릭 여부</td>
+        <td>70%↑</td>
+        <td><span class="pill qt">정량</span></td>
+      </tr>
+      <tr>
+        <td><strong>처방 개인화 점수</strong></td>
+        <td>S3 — "내 상황에 맞는 설명" 5점 척도</td>
+        <td>4.0↑</td>
+        <td><span class="pill both">혼합</span></td>
+      </tr>
+      <tr>
+        <td><strong>CTA 클릭 의향율</strong></td>
+        <td>S4 — "누를 것 같다" 비율</td>
+        <td>60%↑</td>
+        <td><span class="pill qt">정량</span></td>
+      </tr>
+      <tr>
+        <td><strong>자기효능감 상승율</strong></td>
+        <td>S5 — 긍정 요인 보유 페르소나 응답</td>
+        <td>75%↑</td>
+        <td><span class="pill q">정성</span></td>
+      </tr>
+      <tr>
+        <td><strong>서비스 전반 유용성 NPS</strong></td>
+        <td>전체 — "이 서비스가 도움이 될 것 같다" 5점</td>
+        <td>4.0↑</td>
+        <td><span class="pill both">혼합</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <hr>
+
+  <!-- 6. 일정 -->
+  <h2>6. 진행 일정</h2>
+
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-left">
+        <div class="tl-date">W1</div>
+        <div class="tl-dot"></div>
+      </div>
+      <div class="tl-right">
+        <h4>시뮬레이션 준비</h4>
+        <p>페르소나 프로필 1,000개 생성 · 시나리오 프롬프트 작성 · 프로토타입 URL 확정</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-left">
+        <div class="tl-date">W2</div>
+        <div class="tl-dot"></div>
+      </div>
+      <div class="tl-right">
+        <h4>S1–S3 시뮬레이션 실행</h4>
+        <p>1,000명 × S1~S3 시나리오 응답 생성 및 1차 집계</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-left">
+        <div class="tl-date">W3</div>
+        <div class="tl-dot"></div>
+      </div>
+      <div class="tl-right">
+        <h4>S4–S5 + 분석</h4>
+        <p>CTA 전환 · 자기효능감 시뮬레이션 완료 · 가설별 통과/실패 판정</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-left">
+        <div class="tl-date">W4</div>
+        <div class="tl-dot"></div>
+      </div>
+      <div class="tl-right">
+        <h4>결과 리포트 & 개선 제안</h4>
+        <p>ut-result.html 작성 · 실패 가설 기반 UX 개선 우선순위 도출 · 개발 핸드오프</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="notice">
+    ⚠️ <strong>AI 시뮬레이션 한계 고지:</strong> 본 UT는 합성 페르소나 기반 AI 시뮬레이션으로, 실제 사용자 반응과 차이가 있을 수 있습니다.
+    P0 연체 세그먼트(60명) 결과는 실제 민감 사용자 반응과 다를 수 있으므로 정책 결정 전 별도 실사용자 검증을 권장합니다.
+  </div>
+
+</main>
+</body>
+</html>
